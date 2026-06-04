@@ -366,6 +366,164 @@ hr{
     background: #d97706;
 }
 
+/* NEW: Styles for Theme Toggle Button */
+.theme-toggle-btn {
+    position: absolute;
+    top: 28px; /* Padding of the card */
+    left: 28px; /* Padding of the card */
+    background: rgba(255,255,255,.12);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,.2);
+    transition: .2s;
+    z-index: 1001; /* Above other elements */
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(255,255,255,.2);
+    transform: translateY(-1px);
+}
+
+.theme-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* NEW: Light Mode Overrides */
+body.light-mode {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+}
+
+body.light-mode .card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #1e293b;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .theme-toggle-btn,
+body.light-mode .calculator-icon-btn {
+    background: rgba(0, 0, 0, 0.06);
+    color: #1e293b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .theme-toggle-btn:hover,
+body.light-mode .calculator-icon-btn:hover {
+    background: rgba(0, 0, 0, 0.12);
+}
+
+body.light-mode input {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+body.light-mode input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+body.light-mode .gst-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+}
+
+body.light-mode .gst-menu {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .gst-menu div {
+    color: #1e293b;
+}
+
+body.light-mode .gst-menu div:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .gst-menu .gst-manual-input-wrapper {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .gst-menu .gst-manual-input-wrapper input {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.02);
+    color: #1e293b;
+}
+
+body.light-mode .result {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+body.light-mode hr {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .mini-calculator-dialog {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .calculator-display {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .calculator-display .previous-operand {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .calculator-display .current-operand {
+    color: #1e293b;
+}
+
+body.light-mode .calculator-buttons button {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+}
+
+body.light-mode .calculator-buttons button:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .calculator-buttons button[data-operation],
+body.light-mode .calculator-buttons button[data-equals] {
+    background: #0284c7;
+    color: white;
+}
+
+body.light-mode .calculator-buttons button[data-operation]:hover,
+body.light-mode .calculator-buttons button[data-equals]:hover {
+    background: #0369a1;
+}
+
+body.light-mode .calculator-buttons button[data-all-clear] {
+    background: #ef4444;
+    color: white;
+}
+
+body.light-mode .calculator-buttons button[data-all-clear]:hover {
+    background: #dc2626;
+}
+
+body.light-mode .calculator-buttons button[data-delete] {
+    background: #f59e0b;
+    color: white;
+}
+
+body.light-mode .calculator-buttons button[data-delete]:hover {
+    background: #d97706;
+}
+
 </style>
 </head>
 <body>
@@ -380,11 +538,16 @@ hr{
         Add or Remove GST Instantly
     </div>
 
-    <!-- NEW: Calculator Icon Button -->
-    <button id="openCalculatorBtn" class="calculator-icon-btn" aria-label="Open Calculator">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><path d="M8 10h8"/><path d="M8 14h8"/><path d="M8 18h8"/></svg>
-    </button>
-
+    <!-- NEW: Theme Toggle Button -->
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Theme">
+            <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+        </button>
+    
+        <!-- NEW: Calculator Icon Button -->
+        <button id="openCalculatorBtn" class="calculator-icon-btn" aria-label="Open Calculator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><path d="M8 10h8"/><path d="M8 14h8"/><path d="M8 18h8"/></svg>
+        </button>
+    
     <!-- NEW: Mini Calculator Dialog -->
     <div id="miniCalculatorDialog" class="mini-calculator-dialog">
         <div class="calculator-display">
@@ -517,6 +680,7 @@ function setGST(value){
     document.getElementById("selectedGST").innerHTML=
         value + "% GST ▼";
 
+    localStorage.setItem('gstRate', value); // Save preference
     gstMenu.classList.remove("show");
     document.getElementById("manualGSTInput").value = ""; // Clear manual input
     miniCalculatorDialog.classList.remove('show'); // Close calculator if open
@@ -529,6 +693,7 @@ manualGSTInput.addEventListener("input", () => {
     if (!isNaN(customGST) && customGST >= 0) {
         document.getElementById("gst").value = customGST;
         document.getElementById("selectedGST").innerHTML = customGST + "% GST ▼";
+        localStorage.setItem('gstRate', customGST); // Save custom preference
     } else if (manualGSTInput.value === "") {
         document.getElementById("selectedGST").innerHTML = "Custom GST ▼";
     } else {
@@ -536,6 +701,13 @@ manualGSTInput.addEventListener("input", () => {
     }
     miniCalculatorDialog.classList.remove('show'); // Close calculator if open
 });
+
+// Load saved GST rate preference on page load
+const savedGSTRate = localStorage.getItem('gstRate');
+if (savedGSTRate !== null) {
+    document.getElementById("gst").value = savedGSTRate;
+    document.getElementById("selectedGST").innerHTML = savedGSTRate + "% GST ▼";
+}
 
 // Global click listener for closing popups
 window.addEventListener("click",(e)=>{
@@ -796,6 +968,32 @@ percentButton.addEventListener('click', button => {
 
 // Initialize display
 calculator.updateDisplay();
+
+// NEW: Theme Toggle Logic
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+
+const sunIcon = `<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>`;
+const moonIcon = `<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>`;
+
+// Check saved theme preference
+if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    themeIcon.innerHTML = moonIcon;
+} else {
+    themeIcon.innerHTML = sunIcon;
+}
+
+themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    if (document.body.classList.contains('light-mode')) {
+        themeIcon.innerHTML = moonIcon;
+        localStorage.setItem('theme', 'light');
+    } else {
+        themeIcon.innerHTML = sunIcon;
+        localStorage.setItem('theme', 'dark');
+    }
+});
 
 </script>
 
