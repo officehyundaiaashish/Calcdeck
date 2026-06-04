@@ -1,9 +1,12 @@
-const CACHE_NAME = "gst-calculator-v1";
+const CACHE_NAME = "gst-calculator-v2"; // Increment cache version
 
 const urlsToCache = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap",
+  "icons/icon-192.png",
+  "icons/icon-512.png"
 ];
 
 self.addEventListener("install", event => {
