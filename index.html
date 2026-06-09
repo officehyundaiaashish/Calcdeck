@@ -91,6 +91,65 @@ input::placeholder{
     margin-bottom:18px;
 }
 
+/* NEW: Amount Clear Button */
+.amount-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.clear-input-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255,255,255,.6);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 6px;
+    display: none;
+    z-index: 10;
+    line-height: 1;
+    pointer-events: auto;
+}
+
+body.light-mode .clear-input-btn {
+    color: rgba(0,0,0,.5);
+}
+
+.clear-input-btn:hover {
+    color: rgba(255,255,255,.9);
+}
+
+body.light-mode .clear-input-btn:hover {
+    color: rgba(0,0,0,.8);
+}
+
+/* Remove up/down arrows from number input */
+#amount::-webkit-outer-spin-button,
+#amount::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#amount {
+    -moz-appearance: textfield;
+    padding-right: 48px !important;   /* Extra space for × button */
+}
+
+body.light-mode .clear-input-btn {
+    color: rgba(0,0,0,.5);
+}
+
+.clear-input-btn:hover {
+    color: rgba(255,255,255,.9);
+}
+
+body.light-mode .clear-input-btn:hover {
+    color: rgba(0,0,0,.8);
+}
+
 .gst-selector{
     position:relative;
 }
@@ -1012,11 +1071,14 @@ body.light-mode .clear-dialog-buttons .cancel-btn:hover {
         <div class="calc-col-left">
             <div class="row">
                 <label>Amount</label>
-                <input
-                    type="number"
-                    id="amount"
-                    placeholder="Enter Amount"
-                    inputmode="decimal">
+                <div class="amount-input-wrapper">
+                    <input
+                        type="number"
+                        id="amount"
+                        placeholder="Enter Amount"
+                        inputmode="decimal">
+                    <button id="clearAmountBtn" class="clear-input-btn" aria-label="Clear amount">×</button>
+                </div>
             </div>
 
             <div class="row">
@@ -1551,6 +1613,28 @@ window.addEventListener('load', () => {
         });
     }
 });
+
+// NEW: Clear Amount Button
+const amountInput = document.getElementById('amount');
+const clearAmountBtn = document.getElementById('clearAmountBtn');
+
+function toggleClearButton() {
+    if (amountInput.value.length > 0) {
+        clearAmountBtn.style.display = 'block';
+    } else {
+        clearAmountBtn.style.display = 'none';
+    }
+}
+
+amountInput.addEventListener('input', toggleClearButton);
+clearAmountBtn.addEventListener('click', () => {
+    amountInput.value = '';
+    toggleClearButton();
+    amountInput.focus();
+});
+
+// Initial check
+toggleClearButton();
 
 </script>
 
