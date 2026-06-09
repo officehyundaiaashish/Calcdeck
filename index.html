@@ -604,6 +604,216 @@ body.light-mode .calculator-buttons button[data-delete] {
 body.light-mode .calculator-buttons button[data-delete]:hover {
     background: #d97706;
 }
+
+/* NEW: History Button & Dialog Styles */
+.history-icon-btn {
+    position: absolute;
+    top: 28px;
+    right: 78px;
+    background: rgba(255,255,255,.12);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,.2);
+    transition: .2s;
+    z-index: 1001;
+}
+
+.history-icon-btn:hover {
+    background: rgba(255,255,255,.2);
+    transform: translateY(-1px);
+}
+
+.history-icon-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.history-dialog {
+    position: absolute;
+    top: 78px;
+    right: 28px;
+    width: 300px;
+    background: #1e293b;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    border: 1px solid rgba(255,255,255,.1);
+    z-index: 1003;
+    padding: 15px;
+    max-height: 420px;
+    overflow-y: auto;
+    transform-origin: top right;
+    opacity: 0;
+    transform: scale(0.85) translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.history-dialog.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+
+.history-item {
+    background: rgba(255,255,255,.08);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border: 1px solid rgba(255,255,255,.1);
+}
+
+.history-item:last-child {
+    margin-bottom: 0;
+}
+
+.history-clear-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.history-clear-btn:hover {
+    background: #dc2626;
+}
+
+.history-empty {
+    text-align: center;
+    padding: 30px 10px;
+    opacity: 0.7;
+}
+
+/* Light mode for history */
+body.light-mode .history-icon-btn {
+    background: rgba(0, 0, 0, 0.06);
+    color: #1e293b;
+}
+
+body.light-mode .history-icon-btn:hover {
+    background: rgba(0, 0, 0, 0.12);
+}
+
+body.light-mode .history-dialog {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .history-item {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #1e293b;
+}
+
+body.light-mode .history-clear-btn {
+    background: #ef4444;
+    color: white;
+}
+
+/* NEW: Custom Clear Dialog - Fully matched with app UI */
+.clear-dialog {
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.clear-dialog.show {
+    display: flex;
+}
+
+.clear-dialog-content {
+    background: #1e293b;
+    border-radius: 20px;
+    padding: 28px;
+    width: 90%;
+    max-width: 340px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 25px 60px rgba(0,0,0,.45);
+}
+
+body.light-mode .clear-dialog-content {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,.1);
+    color: #1e293b;
+    box-shadow: 0 25px 60px rgba(0,0,0,.15);
+}
+
+.clear-dialog-content h3 {
+    margin-bottom: 12px;
+    font-size: 20px;
+}
+
+.clear-dialog-content p {
+    margin-bottom: 28px;
+    opacity: 0.85;
+    line-height: 1.4;
+}
+
+.clear-dialog-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.clear-dialog-buttons button {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: .2s;
+}
+
+.clear-dialog-buttons .cancel-btn {
+    background: rgba(255,255,255,.15);
+    color: white;
+}
+
+body.light-mode .clear-dialog-buttons .cancel-btn {
+    background: rgba(0,0,0,.08);
+    color: #1e293b;
+}
+
+.clear-dialog-buttons .cancel-btn:hover {
+    background: rgba(255,255,255,.25);
+}
+
+body.light-mode .clear-dialog-buttons .cancel-btn:hover {
+    background: rgba(0,0,0,.15);
+}
+
+.clear-dialog-buttons .confirm-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.clear-dialog-buttons .confirm-btn:hover {
+    background: #dc2626;
+}
+
 .calc-body {
     display: flex;
     flex-direction: column;
@@ -627,10 +837,21 @@ body.light-mode .calculator-buttons button[data-delete]:hover {
         right: 40px;
     }
 
+    .history-icon-btn {
+        top: 25px;
+        right: 88px; /* Adjusted for exact level alignment with calculator icon */
+    }
+
     .mini-calculator-dialog {
         top: 90px;
         right: 40px;
         width: 280px;
+    }
+
+    .history-dialog {
+        top: 90px;
+        right: 40px;
+        width: 320px;
     }
 
     .calc-body {
@@ -733,6 +954,11 @@ body.light-mode .calculator-buttons button[data-delete]:hover {
             <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
         </button>
 
+        <!-- NEW: History Icon Button -->
+        <button id="openHistoryBtn" class="history-icon-btn" aria-label="Open History">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+        </button>
+
         <!-- NEW: Calculator Icon Button -->
         <button id="openCalculatorBtn" class="calculator-icon-btn" aria-label="Open Calculator">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><path d="M8 10h8"/><path d="M8 14h8"/><path d="M8 18h8"/></svg>
@@ -764,6 +990,25 @@ body.light-mode .calculator-buttons button[data-delete]:hover {
             <button data-number>.</button>
             <button data-number>0</button>
             <button data-equals class="span-two">=</button>
+        </div>
+    </div>
+
+    <!-- NEW: History Dialog -->
+    <div id="historyDialog" class="history-dialog">
+        <h3 style="margin-bottom: 15px; text-align: center; color: inherit;">Calculation History</h3>
+        <div id="historyList"></div>
+        <button id="clearHistoryBtn" class="history-clear-btn">Clear All</button>
+    </div>
+
+    <!-- NEW: Custom Clear Dialog -->
+    <div id="clearConfirmDialog" class="clear-dialog">
+        <div class="clear-dialog-content">
+            <h3>Clear All History?</h3>
+            <p>This action cannot be undone.<br>All previous GST calculations will be deleted.</p>
+            <div class="clear-dialog-buttons">
+                <button class="cancel-btn" id="cancelClearBtn">Cancel</button>
+                <button class="confirm-btn" id="confirmClearBtn">Yes, Clear All</button>
+            </div>
         </div>
     </div>
 
@@ -914,6 +1159,14 @@ window.addEventListener("click",(e)=>{
     if (miniCalculatorDialog && openCalculatorBtn && !e.target.closest('.mini-calculator-dialog') && !e.target.closest('#openCalculatorBtn')) {
         miniCalculatorDialog.classList.remove('show');
     }
+    // Close history dialog
+    if (historyDialog && openHistoryBtn && !e.target.closest('.history-dialog') && !e.target.closest('#openHistoryBtn')) {
+        historyDialog.classList.remove('show');
+    }
+    // Close custom clear dialog
+    if (clearConfirmDialog && !e.target.closest('.clear-dialog-content')) {
+        clearConfirmDialog.classList.remove('show');
+    }
 });
 
 function addGST(){
@@ -942,6 +1195,9 @@ function addGST(){
 
     document.getElementById("total").innerText =
         "₹" + total.toFixed(2);
+
+    // Save to history
+    saveToHistory('add', amount, gst, gstAmount, total);
 }
 
 function removeGST(){
@@ -970,6 +1226,9 @@ function removeGST(){
 
     document.getElementById("total").innerText =
         "₹" + amount.toFixed(2);
+
+    // Save to history
+    saveToHistory('remove', amount, gst, gstAmount, amount);
 }
 
 let deferredPrompt;
@@ -1001,7 +1260,15 @@ document
     deferredPrompt = null;
 });
 
+if("serviceWorker" in navigator){
 
+    window.addEventListener("load",()=>{
+
+        navigator.serviceWorker.register(
+            "./service-worker.js"
+        );
+    });
+}
 
 // NEW: Mini Calculator Logic
 const numberButtons = document.querySelectorAll('[data-number]');
@@ -1012,6 +1279,17 @@ const allClearButton = document.querySelector('[data-all-clear]');
 const percentButton = document.querySelector('[data-percent]');
 const previousOperandTextElement = document.querySelector('[data-previous-operand]');
 const currentOperandTextElement = document.querySelector('[data-current-operand]');
+
+// NEW: History elements
+const openHistoryBtn = document.getElementById('openHistoryBtn');
+const historyDialog = document.getElementById('historyDialog');
+const historyList = document.getElementById('historyList');
+const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+// NEW: Custom clear dialog elements
+const clearConfirmDialog = document.getElementById('clearConfirmDialog');
+const cancelClearBtn = document.getElementById('cancelClearBtn');
+const confirmClearBtn = document.getElementById('confirmClearBtn');
 
 class Calculator {
     constructor(previousOperandTextElement, currentOperandTextElement) {
@@ -1155,6 +1433,85 @@ percentButton.addEventListener('click', button => {
 
 // Initialize display
 calculator.updateDisplay();
+
+// History functions
+function saveToHistory(type, amount, gstRate, gstAmount, total) {
+    if (amount <= 0) return;
+    
+    let history = JSON.parse(localStorage.getItem('gstHistory') || '[]');
+    
+    const entry = {
+        id: Date.now(),
+        type: type,
+        amount: amount,
+        gstRate: gstRate,
+        gstAmount: gstAmount,
+        total: total,
+        date: new Date().toLocaleString()
+    };
+    
+    history.unshift(entry);
+    if (history.length > 50) history.pop();
+    
+    localStorage.setItem('gstHistory', JSON.stringify(history));
+    renderHistory();
+}
+
+function renderHistory() {
+    const history = JSON.parse(localStorage.getItem('gstHistory') || '[]');
+    historyList.innerHTML = '';
+    
+    if (history.length === 0) {
+        historyList.innerHTML = '<div class="history-empty">No calculations yet</div>';
+        return;
+    }
+    
+    history.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+            <div><strong>${item.type === 'add' ? '✅ Added GST' : '❌ Removed GST'}</strong></div>
+            <div>Amount: ₹${item.amount.toFixed(2)}</div>
+            <div>GST: ${item.gstRate}% → ₹${item.gstAmount.toFixed(2)}</div>
+            <div><strong>Total: ₹${item.total.toFixed(2)}</strong></div>
+            <div style="font-size:12px; opacity:0.7; margin-top:4px;">${item.date}</div>
+        `;
+        historyList.appendChild(div);
+    });
+}
+
+function clearHistory() {
+    clearConfirmDialog.classList.add('show');
+}
+
+// Open history
+openHistoryBtn.addEventListener('click', () => {
+    historyDialog.classList.toggle('show');
+    miniCalculatorDialog.classList.remove('show');
+    gstMenu.classList.remove("show");
+    renderHistory();
+});
+
+clearHistoryBtn.addEventListener('click', (e) => {
+    e.stopPropagation();   // <-- This fixes the issue
+    clearHistory();
+});
+
+// Load history on start
+renderHistory();
+
+// Custom clear dialog handlers
+cancelClearBtn.addEventListener('click', () => {
+    clearConfirmDialog.classList.remove('show');
+});
+
+confirmClearBtn.addEventListener('click', () => {
+    localStorage.removeItem('gstHistory');
+    renderHistory();
+    clearConfirmDialog.classList.remove('show');
+    // Extra safety: force close any open history dialog
+    historyDialog.classList.remove('show');
+});
 
 // NEW: Theme Toggle Logic
 const themeToggleBtn = document.getElementById('themeToggleBtn');
