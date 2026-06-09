@@ -1260,13 +1260,17 @@ document
     deferredPrompt = null;
 });
 
+// Service worker registration with cache busting for updates
 if("serviceWorker" in navigator){
-
     window.addEventListener("load",()=>{
-
         navigator.serviceWorker.register(
             "./service-worker.js"
-        );
+        ).then(reg => {
+            // Force update check on every load
+            reg.update();
+        }).catch(err => {
+            console.log("Service worker registration failed:", err);
+        });
     });
 }
 
@@ -1536,6 +1540,19 @@ themeToggleBtn.addEventListener('click', () => {
     } else {
         themeIcon.innerHTML = sunIcon;
         localStorage.setItem('theme', 'dark');
+    }
+});
+
+// Force fresh load for development/updates (removes old cache on mobile)
+window.addEventListener('load', () => {
+    if ('caches' in window) {
+        caches.keys().then(keys => {
+            keys.forEach(key => {
+                if (key.includes('gstcalc')) {
+                    caches.delete(key);
+                }
+            });
+        });
     }
 });
 
