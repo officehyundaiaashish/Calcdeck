@@ -90,9 +90,9 @@ body.light-mode h1 {
 }
 
 /* icon buttons */
-.icon-btn {
+.icon-btn, .comparison-btn {
     position: absolute;
-    top: 1.5rem;
+    top: 1.4rem;
     background: rgba(255, 255, 255, 0.08);
     border: none;
     border-radius: 50%;
@@ -114,8 +114,9 @@ body.light-mode h1 {
 }
 
 #themeToggleBtn { left: 1.5rem; }
-#openCalculatorBtn { right: 1.5rem; }
-#openHistoryBtn { right: 5rem; }
+#openCalculatorBtn { right: 1.2rem; }
+#openHistoryBtn { right: 3.8rem; }
+#openComparisonBtn { right: 5.2rem; }
 
 /* tab switcher */
 .tab-switcher {
@@ -539,6 +540,323 @@ body.light-mode .history-clear-btn {
     background: #dc2626;
 }
 
+/* TOOLTIP STYLES */
+.tooltip-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+.tooltip-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1.5px solid #38bdf8;
+    color: #38bdf8;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: help;
+    margin-left: 6px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+.tooltip-icon:hover {
+    background: #38bdf8;
+    color: #0f172a;
+    transform: scale(1.1);
+}
+.tooltip-box {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    background: #1e293b;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.75rem;
+    color: #e2e8f0;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    z-index: 300;
+}
+.tooltip-box::before {
+    content: '';
+    position: absolute;    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: #38bdf8;
+}
+.tooltip-box::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-bottom-color: #1e293b;
+    margin-bottom: -1px;
+}
+.tooltip-wrapper:hover .tooltip-box,
+.tooltip-wrapper.show-tooltip .tooltip-box {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) scale(1);
+}
+.tooltip-box.multi-line {
+    white-space: normal;
+    width: 220px;
+    text-align: left;
+}
+body.light-mode .tooltip-icon {
+    background: rgba(2, 132, 199, 0.15);
+    border-color: #0284c7;
+    color: #0284c7;
+}
+body.light-mode .tooltip-icon:hover {
+    background: #0284c7;
+    color: white;
+}
+body.light-mode .tooltip-box {
+    background: #ffffff;
+    border-color: rgba(2, 132, 199, 0.3);
+    color: #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+body.light-mode .tooltip-box::before {
+    border-bottom-color: #0284c7;
+}
+body.light-mode .tooltip-box::after {
+    border-bottom-color: #ffffff;
+}
+
+/* COMPARISON TOOL STYLES */.comparison-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 7.2rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #e2e8f0;
+    transition: 0.2s;
+    z-index: 150;
+    backdrop-filter: blur(4px);
+}
+.comparison-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+.comparison-btn.has-items {
+    background: rgba(56, 189, 248, 0.25);
+    color: #38bdf8;
+}
+.comparison-btn.has-items::after {
+    content: attr(data-count);
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.comparison-dialog {
+    position: absolute;
+    top: 80px;
+    right: 1.2rem;
+    width: 320px;
+    background: #111827;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);    z-index: 1000;
+    padding: 14px;
+    opacity: 0;
+    transform: scale(0.92);
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    box-shadow: 0 20px 35px -10px black;
+}
+.comparison-dialog.show {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+.comparison-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.comparison-header h4 {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.comparison-clear-btn {
+    background: rgba(239, 68, 68, 0.2);
+    border: none;
+    color: #ef4444;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.comparison-clear-btn:hover {
+    background: rgba(239, 68, 68, 0.35);
+}
+.comparison-list {
+    max-height: 280px;
+    overflow-y: auto;
+}
+.comparison-item {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 12px;
+    margin-bottom: 10px;
+    font-size: 0.75rem;
+    position: relative;
+}.comparison-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.comparison-item-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.comparison-item-remove {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+.comparison-item-remove:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+.comparison-item-details {
+    opacity: 0.85;
+    line-height: 1.5;
+}
+.comparison-empty {
+    text-align: center;
+    padding: 30px 20px;
+    opacity: 0.6;
+    font-size: 0.8rem;
+}
+.add-to-comparison-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px dashed #38bdf8;
+    border-radius: 1rem;
+    color: #38bdf8;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;    gap: 6px;
+}
+.add-to-comparison-btn:hover {
+    background: rgba(56, 189, 248, 0.25);
+    transform: translateY(-1px);
+}
+.add-to-comparison-btn.added {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+    color: #10b981;
+}
+body.light-mode .comparison-btn {
+    background: rgba(0, 0, 0, 0.06);
+    color: #1e293b;
+    right: 7.2rem;
+}
+body.light-mode .comparison-btn:hover {
+    background: rgba(0, 0, 0, 0.12);
+}
+body.light-mode .comparison-btn.has-items {
+    background: rgba(2, 132, 199, 0.2);
+    color: #0284c7;
+}
+body.light-mode .comparison-dialog {
+    background: #f8fafc;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+body.light-mode .comparison-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+body.light-mode .comparison-clear-btn {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
+body.light-mode .comparison-clear-btn:hover {
+    background: rgba(220, 38, 38, 0.2);
+}
+
+/* SHARE BUTTON STYLES */
+.history-share-btn {
+    background: rgba(56, 189, 248, 0.15);
+    border: none;
+    color: #38bdf8;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    align-self: flex-start;
+}
+.history-share-btn:hover {
+    background: rgba(56, 189, 248, 0.3);
+    transform: translateY(-1px);
+}
+.history-share-btn svg {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+}
+body.light-mode .history-share-btn {
+    background: rgba(2, 132, 199, 0.1);
+    color: #0284c7;
+}
+body.light-mode .history-share-btn:hover {
+    background: rgba(2, 132, 199, 0.2);
+}
+
 .footer { display: none; }
 @media (max-width: 640px) {
     .card { padding: 1.2rem; }
@@ -546,6 +864,8 @@ body.light-mode .history-clear-btn {
     #themeToggleBtn { left: 1rem; }
     #openCalculatorBtn { right: 1rem; }
     #openHistoryBtn { right: 3.8rem; }
+    #openComparisonBtn { right: 5rem; }
+    #openComparisonBtn { right: 6rem; }
     .tab-btn span { display: none; }
     .tab-btn svg { margin: 0; }
     .tab-btn { padding: 10px 0; }
@@ -568,6 +888,9 @@ body.light-mode .history-clear-btn {
     <button id="openHistoryBtn" class="icon-btn" aria-label="History">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
     </button>
+    <button id="openComparisonBtn" class="comparison-btn" aria-label="Comparison" data-count="0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6M15 18v-8M3 21h18"/></svg>
+    </button>
 
     <div class="header-area">
         <svg class="logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 7h6"/><path d="M12 3v18"/><path d="M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
@@ -585,6 +908,13 @@ body.light-mode .history-clear-btn {
         <div id="historyList"></div>
         <button id="clearHistoryBtn" class="history-clear-btn">Clear All</button>
     </div>
+    <div id="comparisonDialog" class="comparison-dialog">
+        <div class="comparison-header">
+            <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6M15 18v-8M3 21h18"/></svg> Comparison</h4>
+            <button id="clearComparisonBtn" class="comparison-clear-btn">Clear</button>
+        </div>
+        <div id="comparisonList" class="comparison-list"></div>
+    </div>
 
     <!-- Custom Clear Confirmation Modal -->
     <div id="customClearModal" class="custom-clear-modal">
@@ -594,6 +924,18 @@ body.light-mode .history-clear-btn {
             <div class="clear-buttons">
                 <button class="cancel-clear" id="cancelClearModal">Cancel</button>
                 <button class="confirm-clear" id="confirmClearModal">Yes, Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Comparison Clear Confirmation Modal -->
+    <div id="customComparisonClearModal" class="custom-clear-modal">
+        <div class="clear-modal-content">
+            <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6M15 18v-8M3 21h18"/></svg> Clear Comparison?</h3>
+            <p>All comparison items will be permanently deleted. This action cannot be undone.</p>
+            <div class="clear-buttons">
+                <button class="cancel-clear" id="cancelComparisonClearModal">Cancel</button>
+                <button class="confirm-clear" id="confirmComparisonClearModal">Yes, Clear All</button>
             </div>
         </div>
     </div>
@@ -609,9 +951,10 @@ body.light-mode .history-clear-btn {
     <div id="panel-gst" class="tab-panel active">
         <div class="two-columns">
             <div class="calc-col-left">
-                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg> Amount (₹)</label><div class="amount-input-wrapper"><input type="number" id="amount" placeholder="Enter amount"><button id="clearAmountBtn" class="clear-input-btn">✕</button></div></div>
-                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M8 12h8M12 18h0"/></svg> GST Rate</label><div class="gst-selector" id="gstSelector"><button class="gst-btn" id="selectedGST">18% GST ▼</button><div class="gst-menu" id="gstMenu"><div class="gst-manual-input-wrapper"><input type="number" id="manualGSTInput" placeholder="Custom GST %"></div><div onclick="setGST(3)">3% GST</div><div onclick="setGST(5)">5% GST</div><div onclick="setGST(12)">12% GST</div><div onclick="setGST(18)">18% GST</div><div onclick="setGST(28)">28% GST</div></div><input type="hidden" id="gst" value="18"></div></div>
+                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg> Amount (₹)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Enter the base amount before GST. Example: For a ₹1000 product, enter 1000.</span></span></label><div class="amount-input-wrapper"><input type="number" id="amount" placeholder="Enter amount"><button id="clearAmountBtn" class="clear-input-btn">✕</button></div></div>
+                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M8 12h8M12 18h0"/></svg> GST Rate<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Select a preset GST rate or enter a custom percentage. Common rates: 5% (essentials), 12% (processed), 18% (standard), 28% (luxury).</span></span></label><div class="gst-selector" id="gstSelector"><button class="gst-btn" id="selectedGST">18% GST ▼</button><div class="gst-menu" id="gstMenu"><div class="gst-manual-input-wrapper"><input type="number" id="manualGSTInput" placeholder="Custom GST %"></div><div onclick="setGST(3)">3% GST</div><div onclick="setGST(5)">5% GST</div><div onclick="setGST(12)">12% GST</div><div onclick="setGST(18)">18% GST</div><div onclick="setGST(28)">28% GST</div></div><input type="hidden" id="gst" value="18"></div></div>
                 <div class="action-btns"><button class="action add" onclick="addGST()">Add GST</button><button class="action remove" onclick="removeGST()">Remove GST</button></div>
+                <button class="add-to-comparison-btn" id="addGSTToComparison" onclick="addToComparison('gst')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison</button>
             </div>
             <div class="calc-col-right"><div class="result"><div class="result-item"><span>Base Amount</span><span id="base">₹0.00</span></div><div class="result-item"><span>GST Amount</span><span id="gstAmount">₹0.00</span></div><hr><div class="result-item"><span>Total (incl. GST)</span><span class="total" id="total">₹0.00</span></div></div></div>
         </div>
@@ -620,10 +963,11 @@ body.light-mode .history-clear-btn {
     <!-- Panel 2: Per Gram -->
     <div id="panel-pergram" class="tab-panel" style="display:none">
         <div class="two-columns">
-            <div><div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><path d="M9 9h6v6H9z"/></svg> Total Price (₹)</label><input type="number" id="pgPrice" placeholder="e.g. 250"></div>
-            <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M4 12h16"/></svg> Weight / Quantity</label><input type="number" id="pgWeight" placeholder="e.g. 500"></div>
-            <div class="row"><label>📏 Unit</label><div class="unit-selector" id="unitSelector"><button class="unit-btn" id="selectedUnit">Gram (g) ▼</button><div class="unit-menu" id="unitMenu"><div onclick="setUnit('g','Gram (g)')">Gram (g)</div><div onclick="setUnit('kg','Kilogram (kg)')">Kilogram (kg)</div><div onclick="setUnit('piece','Piece (unit)')">Piece (unit)</div></div><input type="hidden" id="pgUnit" value="g"></div></div>
-            <div class="action-btns"><button class="action add" onclick="calcPerGram()">Calculate</button><button class="action secondary" onclick="clearPGCalc()">Clear</button></div></div>
+            <div><div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><path d="M9 9h6v6H9z"/></svg> Total Price (₹)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box">Enter the total price of the item.</span></span></label><input type="number" id="pgPrice" placeholder="e.g. 250"></div>
+            <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M4 12h16"/></svg> Weight / Quantity<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Enter the weight or quantity. The unit selector below lets you choose grams, kilograms, or pieces.</span></span></label><input type="number" id="pgWeight" placeholder="e.g. 500"></div>
+            <div class="row"><label>📏 Unit<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box">Select the unit of measurement for accurate per-unit calculation.</span></span></label><div class="unit-selector" id="unitSelector"><button class="unit-btn" id="selectedUnit">Gram (g) ▼</button><div class="unit-menu" id="unitMenu"><div onclick="setUnit('g','Gram (g)')">Gram (g)</div><div onclick="setUnit('kg','Kilogram (kg)')">Kilogram (kg)</div><div onclick="setUnit('piece','Piece (unit)')">Piece (unit)</div></div><input type="hidden" id="pgUnit" value="g"></div></div>
+            <div class="action-btns"><button class="action add" onclick="calcPerGram()">Calculate</button><button class="action secondary" onclick="clearPGCalc()">Clear</button></div>
+            <button class="add-to-comparison-btn" id="addPGToComparison" onclick="addToComparison('pergram')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison</button></div>
             <div class="result"><div class="result-item"><span>Total Price</span><span id="pgResultPrice">₹0.00</span></div><div class="result-item"><span>Total Qty</span><span id="pgResultWeight">0</span></div><hr><div class="result-item"><span id="pgResultLabel">Price per Gram</span><span class="pg-total" id="pgResultPerUnit">₹0.00</span></div><div id="pgPer100Row" class="result-item" style="display:none"><span>Price per 100g</span><span id="pgResultPer100">₹0.00</span></div><div id="pgPer1kgRow" class="result-item" style="display:none"><span>Price per 1kg</span><span id="pgResultPer1kg">₹0.00</span></div></div>
         </div>
     </div>
@@ -631,10 +975,11 @@ body.light-mode .history-clear-btn {
     <!-- Panel 3: Discount -->
     <div id="panel-discount" class="tab-panel" style="display:none">
         <div class="two-columns">
-            <div><div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/></svg> Original Price (₹)</label><input type="number" id="discountPrice" placeholder="0.00"></div>
-            <div class="row"><label>Discount Type</label><div class="discount-group"><button data-type="percent" class="discount-type-btn active">% Percentage</button><button data-type="fixed" class="discount-type-btn">₹ Fixed</button></div></div>
-            <div class="row"><label id="discountValueLabel">Discount (%)</label><input type="number" id="discountValue" placeholder="e.g. 15"></div>
-            <div class="action-btns"><button class="action add" onclick="calcDiscount()">Apply Discount</button><button class="action secondary" onclick="clearDiscount()">Reset</button></div></div>
+            <div><div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/></svg> Original Price (₹)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box">Enter the original price before discount.</span></span></label><input type="number" id="discountPrice" placeholder="0.00"></div>
+            <div class="row"><label>Discount Type<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Choose between percentage discount (e.g., 20% off) or fixed amount discount (e.g., ₹100 off).</span></span></label><div class="discount-group"><button data-type="percent" class="discount-type-btn active">% Percentage</button><button data-type="fixed" class="discount-type-btn">₹ Fixed</button></div></div>
+            <div class="row"><label id="discountValueLabel">Discount (%)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box">Enter the discount percentage or fixed amount based on your selection.</span></span></label><input type="number" id="discountValue" placeholder="e.g. 15"></div>
+            <div class="action-btns"><button class="action add" onclick="calcDiscount()">Apply Discount</button><button class="action secondary" onclick="clearDiscount()">Reset</button></div>
+            <button class="add-to-comparison-btn" id="addDiscountToComparison" onclick="addToComparison('discount')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison</button></div>
             <div class="result"><div class="result-item"><span>Original Price</span><span id="originalDisplay">₹0.00</span></div><div class="result-item"><span>You Save</span><span id="savedAmount" style="color:#f97316; font-weight:700">₹0.00</span></div><hr><div class="result-item"><span>Final Price</span><span class="total" id="finalPrice">₹0.00</span></div><div class="result-item"><span>Discount %</span><span id="effectivePercent">0%</span></div></div>
         </div>
     </div>
@@ -658,16 +1003,16 @@ function renderHistory() {
     if(!container) return;
     if(unifiedHistory.length === 0) { container.innerHTML = '<div style="text-align:center; padding:20px; opacity:0.6;">No calculations yet</div>'; return; }
     container.innerHTML = unifiedHistory.map(entry => {
-        let iconSvg = '', title = '';
-        if(entry.type === 'gst_add') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="10"/></svg>`; title = `Add GST (${entry.gstRate}%)`; }
-        else if(entry.type === 'gst_remove') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14"/><circle cx="12" cy="12" r="10"/></svg>`; title = `Remove GST (${entry.gstRate}%)`; }
-        else if(entry.type === 'pergram') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 12H4M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/></svg>`; title = `Per Gram · ${entry.unit}`; }
-        else if(entry.type === 'discount') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 15l6-6"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/></svg>`; title = `Discount (${entry.discountType === 'percent' ? entry.discountValue+'%' : '₹'+entry.discountValue})`; }
+        let iconSvg = '', title = '', shareText = '';
+        if(entry.type === 'gst_add') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="10"/></svg>`; title = `Add GST (${entry.gstRate}%)`; shareText = `GST Calculation:\nBase: ₹${entry.amount.toFixed(2)}\nGST (${entry.gstRate}%): ₹${entry.gstAmount.toFixed(2)}\nTotal: ₹${entry.total.toFixed(2)}`; }
+        else if(entry.type === 'gst_remove') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14"/><circle cx="12" cy="12" r="10"/></svg>`; title = `Remove GST (${entry.gstRate}%)`; shareText = `GST Removal:\nTotal: ₹${entry.total.toFixed(2)}\nGST (${entry.gstRate}%): ₹${entry.gstAmount.toFixed(2)}\nBase: ₹${entry.amount.toFixed(2)}`; }
+        else if(entry.type === 'pergram') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 12H4M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/></svg>`; title = `Per Gram · ${entry.unit}`; shareText = `Per Gram Calculation:\n${entry.priceLabel}: ₹${entry.price}\n${entry.weightDisplay}\n${entry.perUnitLabel}: ₹${entry.perUnit}`; }
+        else if(entry.type === 'discount') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 15l6-6"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/></svg>`; title = `Discount (${entry.discountType === 'percent' ? entry.discountValue+'%' : '₹'+entry.discountValue})`; shareText = `Discount Calculation:\nOriginal: ₹${entry.original}\nDiscount: ${entry.discountType === 'percent' ? entry.discountValue+'%' : '₹'+entry.discountValue}\nSaved: ₹${entry.saved}\nFinal: ₹${entry.final}`; }
         let details = '';
         if(entry.type === 'gst_add' || entry.type === 'gst_remove') details = `Base: ₹${entry.amount.toFixed(2)} → Total: ₹${entry.total.toFixed(2)} (GST: ₹${entry.gstAmount.toFixed(2)})`;
         else if(entry.type === 'pergram') details = `${entry.priceLabel}: ₹${entry.price} | ${entry.weightDisplay} → ${entry.perUnitLabel}: ₹${entry.perUnit}`;
         else if(entry.type === 'discount') details = `Original: ₹${entry.original} | Saved: ₹${entry.saved} → Final: ₹${entry.final}`;
-        return `<div class="history-item"><div class="history-item-header">${iconSvg}<span>${title}</span></div><div class="history-details">${details}</div><div class="history-date">${entry.date}</div></div>`;
+        return `<div class="history-item" data-share="${encodeURIComponent(shareText)}"><div class="history-item-header">${iconSvg}<span>${title}</span></div><div class="history-details">${details}</div><button class="history-share-btn" onclick="shareHistoryItem(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg> Share</button><div class="history-date">${entry.date}</div></div>`;
     }).join('');
 }
 function addHistoryEntry(entry) { unifiedHistory.unshift({ id: Date.now(), ...entry, date: new Date().toLocaleString() }); if(unifiedHistory.length > 50) unifiedHistory.pop(); localStorage.setItem('calcSuiteHistory', JSON.stringify(unifiedHistory)); renderHistory(); }
@@ -771,6 +1116,174 @@ window.switchTab = function(tab){
 switchTab('gst'); renderHistory();
 document.getElementById('openHistoryBtn')?.addEventListener('click',(e)=>{ e.stopPropagation(); renderHistory(); document.getElementById('historyDialog')?.classList.toggle('show'); closeAllDropdowns(); miniDialog.classList.remove('show'); });
 document.addEventListener('click',(e)=>{ if(!document.getElementById('historyDialog')?.contains(e.target) && e.target !== document.getElementById('openHistoryBtn')) document.getElementById('historyDialog')?.classList.remove('show'); });
+
+// ---------- TOOLTIP FIRST-TIME INTERACTION ----------
+function initTooltips() {
+    const hasSeenTooltips = localStorage.getItem('calcSuiteSeenTooltips');
+    if(!hasSeenTooltips) {
+        const tooltipWrappers = document.querySelectorAll('.tooltip-wrapper');
+        tooltipWrappers.forEach((wrapper, index) => {
+            setTimeout(() => {
+                wrapper.classList.add('show-tooltip');
+                setTimeout(() => wrapper.classList.remove('show-tooltip'), 3000);
+            }, index * 400);
+        });
+        localStorage.setItem('calcSuiteSeenTooltips', 'true');
+    }
+    document.querySelectorAll('.tooltip-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const wrapper = icon.closest('.tooltip-wrapper');
+            wrapper.classList.toggle('show-tooltip');
+        });
+    });
+    document.addEventListener('click', (e) => {
+        if(!e.target.closest('.tooltip-wrapper')) {
+            document.querySelectorAll('.tooltip-wrapper').forEach(w => w.classList.remove('show-tooltip'));
+        }
+    });
+}
+initTooltips();
+
+// ---------- COMPARISON TOOL ----------
+let comparisonItems = JSON.parse(localStorage.getItem('calcSuiteComparison') || '[]');
+const comparisonDialog = document.getElementById('comparisonDialog');
+const openComparisonBtn = document.getElementById('openComparisonBtn');
+const clearComparisonBtn = document.getElementById('clearComparisonBtn');
+const comparisonList = document.getElementById('comparisonList');
+
+function updateComparisonBtn() {
+    openComparisonBtn.setAttribute('data-count', comparisonItems.length);
+    if(comparisonItems.length > 0) {
+        openComparisonBtn.classList.add('has-items');
+    } else {
+        openComparisonBtn.classList.remove('has-items');
+    }
+}
+
+function renderComparison() {
+    if(comparisonItems.length === 0) {
+        comparisonList.innerHTML = '<div class="comparison-empty">No items to compare. Add calculations using the "Add to Comparison" button.</div>';        return;
+    }
+    comparisonList.innerHTML = comparisonItems.map((item, index) => {
+        let iconSvg = '', title = '', details = '';
+        if(item.type === 'gst') {
+            iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="10"/></svg>`;
+            title = `GST ${item.gstRate}%`;
+            details = `Base: ₹${item.amount} → Total: ₹${item.total}`;
+        } else if(item.type === 'pergram') {
+            iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><path d="M20 12H4M12 4v16"/></svg>`;
+            title = `Per ${item.unit}`;
+            details = `₹${item.price} / ${item.weight} → ₹${item.perUnit}`;
+        } else if(item.type === 'discount') {
+            iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="14" height="14"><path d="M9 15l6-6"/></svg>`;
+            title = `Discount ${item.discount}`;
+            details = `₹${item.original} → ₹${item.final} (Save ₹${item.saved})`;
+        }
+        return `<div class="comparison-item"><div class="comparison-item-header"><span class="comparison-item-title">${iconSvg}${title}</span><button class="comparison-item-remove" onclick="removeFromComparison(${index})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="comparison-item-details">${details}</div></div>`;
+    }).join('');
+}
+
+window.addToComparison = function(calcType) {
+    let item = { type: calcType, addedAt: Date.now() };
+    if(calcType === 'gst') {
+        const amt = parseFloat(document.getElementById('amount').value) || 0;
+        const gst = parseFloat(document.getElementById('gst').value) || 0;
+        if(amt <= 0) { alert('Please calculate GST first'); return; }
+        item.amount = amt.toFixed(2);
+        item.gstRate = gst;
+        item.total = document.getElementById('total').innerText.replace('₹','');
+        const btn = document.getElementById('addGSTToComparison');
+        btn.classList.add('added');
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Added!';
+        setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison'; }, 1500);
+    } else if(calcType === 'pergram') {
+        const price = parseFloat(document.getElementById('pgPrice').value) || 0;
+        const weight = parseFloat(document.getElementById('pgWeight').value) || 0;
+        if(price <= 0 || weight <= 0) { alert('Please calculate Per Gram first'); return; }
+        item.price = price.toFixed(2);
+        item.weight = document.getElementById('pgWeight').value + ' ' + document.getElementById('pgUnit').value;
+        item.unit = document.getElementById('selectedUnit').innerText.replace(' ▼','');
+        item.perUnit = document.getElementById('pgResultPerUnit').innerText.replace('₹','');
+        const btn = document.getElementById('addPGToComparison');
+        btn.classList.add('added');
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Added!';
+        setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison'; }, 1500);
+    } else if(calcType === 'discount') {
+        const orig = parseFloat(document.getElementById('discountPrice').value) || 0;
+        if(orig <= 0) { alert('Please calculate Discount first'); return; }
+        item.original = orig.toFixed(2);        item.discount = document.getElementById('discountValue').value + (discountMode === 'percent' ? '%' : '₹');
+        item.final = document.getElementById('finalPrice').innerText.replace('₹','');
+        item.saved = document.getElementById('savedAmount').innerText.replace('₹','');
+        const btn = document.getElementById('addDiscountToComparison');
+        btn.classList.add('added');
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Added!';
+        setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison'; }, 1500);
+    }
+    comparisonItems.unshift(item);
+    if(comparisonItems.length > 10) comparisonItems.pop();
+    localStorage.setItem('calcSuiteComparison', JSON.stringify(comparisonItems));
+    updateComparisonBtn();
+    renderComparison();
+};
+
+window.removeFromComparison = function(index) {
+    comparisonItems.splice(index, 1);
+    localStorage.setItem('calcSuiteComparison', JSON.stringify(comparisonItems));
+    updateComparisonBtn();
+    renderComparison();
+};
+
+// Custom Comparison clear modal logic
+const comparisonClearModal = document.getElementById('customComparisonClearModal');
+const cancelComparisonClearModal = document.getElementById('cancelComparisonClearModal');
+const confirmComparisonClearModal = document.getElementById('confirmComparisonClearModal');
+
+clearComparisonBtn?.addEventListener('click', () => { comparisonClearModal.classList.add('show'); });
+cancelComparisonClearModal?.addEventListener('click', () => { comparisonClearModal.classList.remove('show'); });
+confirmComparisonClearModal?.addEventListener('click', () => { comparisonItems = []; localStorage.setItem('calcSuiteComparison', '[]'); updateComparisonBtn(); renderComparison(); comparisonClearModal.classList.remove('show'); });
+// close modal on backdrop click
+comparisonClearModal?.addEventListener('click', (e) => { if(e.target === comparisonClearModal) comparisonClearModal.classList.remove('show'); });
+
+openComparisonBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    renderComparison();
+    comparisonDialog.classList.toggle('show');
+    closeAllDropdowns();
+    miniDialog.classList.remove('show');
+    document.getElementById('historyDialog')?.classList.remove('show');
+});
+
+document.addEventListener('click', (e) => {
+    if(!comparisonDialog?.contains(e.target) && e.target !== openComparisonBtn) {
+        comparisonDialog?.classList.remove('show');
+    }
+});
+
+updateComparisonBtn();
+renderComparison();
+
+// ---------- SHARE HISTORY ITEM ----------
+window.shareHistoryItem = function(btn) {
+    const historyItem = btn.closest('.history-item');    const shareText = decodeURIComponent(historyItem.getAttribute('data-share') || '');
+    const shareData = {
+        title: 'Calc Suite Result',
+        text: shareText + '\n\n— Shared via Calc Suite'
+    };
+    if(navigator.share) {
+        navigator.share(shareData).catch(() => {
+            navigator.clipboard.writeText(shareData.text);
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Copied!';
+            setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg> Share'; }, 1500);
+        });
+    } else {
+        navigator.clipboard.writeText(shareData.text);
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Copied!';
+        setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg> Share'; }, 1500);
+    }
+};
+
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js').catch(e=>console);
 </script>
 </body>
