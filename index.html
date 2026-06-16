@@ -332,6 +332,15 @@ hr {
     overflow-y: auto;
     
 }
+.history-dialog {
+    overflow: hidden;
+}
+#historyList {
+    max-height: 450px;
+    overflow-y: auto;
+    margin: 0 -4px;
+    padding: 0 4px;
+}
 .mini-calculator-dialog.show, .history-dialog.show {
     opacity: 1;
     transform: scale(1);
@@ -373,6 +382,7 @@ hr {
     flex-direction: column;
     gap: 5px;
     flex-shrink: 0;
+    min-width: 0;
 }
 .history-item-header {
     display: flex;
