@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -574,6 +575,33 @@ body.light-mode .history-clear-btn {
     background: #dc2626;
 }
 
+/* Additional light-mode fixes for content visibility */
+body.light-mode .tab-btn { color: #475569; }
+body.light-mode .tab-btn:hover:not(.active) { background: rgba(0,0,0,0.05); color: #1e293b; }
+body.light-mode .tab-switcher { background: rgba(0,0,0,0.04); }
+body.light-mode label { color: #475569; opacity: 1; }
+body.light-mode .result-item span { color: #1e293b; }
+body.light-mode .result-item { color: #0f172a; }
+body.light-mode .discount-saved { color: #ea580c !important; }
+body.light-mode hr { border-color: rgba(0,0,0,0.1); }
+body.light-mode .action.secondary { background: #64748b; color: white; }
+body.light-mode .add-to-comparison-btn {
+    background: rgba(0,0,0,0.04);
+    color: #475569;
+    border-color: rgba(0,0,0,0.1);
+}
+body.light-mode .add-to-comparison-btn:hover {
+    background: rgba(217,119,6,0.1);
+    color: #b45309;
+    border-color: rgba(217,119,6,0.3);
+}
+body.light-mode .discount-type-btn { background: rgba(0,0,0,0.05); color: #475569; }
+body.light-mode .discount-type-btn.active { background: #475569; color: white; }
+body.light-mode .clear-input-btn { color: #64748b; }
+body.light-mode .gst-manual-input-wrapper input { background: #f1f5f9; color: #0f172a; }
+body.light-mode .add-to-comparison-btn svg { stroke: currentColor; }
+body.light-mode .total, body.light-mode .pg-total, body.light-mode .discount-saved { color: #0284c7; }
+
 /* TOOLTIP STYLES */
 .tooltip-wrapper {
     position: relative;
@@ -889,6 +917,370 @@ body.light-mode .history-share-btn:hover {
     .tab-btn { padding: 8px 0; }
     .mini-calculator-dialog, .history-dialog { right: 0.8rem; width: 260px; top: 70px; }
 }
+
+/* ===================== LIVE GOLD RATE WIDGET ===================== */
+.gold-rate-widget {
+    background: linear-gradient(135deg, rgba(251,191,36,0.08) 0%, rgba(245,158,11,0.04) 100%);
+    border: 1px solid rgba(251,191,36,0.25);
+    border-radius: 1.5rem;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 24px -10px rgba(251,191,36,0.15);
+}
+.gold-rate-widget .grw-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+}
+.gold-rate-widget .grw-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fbbf24;
+    letter-spacing: 0.3px;
+}
+.gold-rate-widget .grw-title svg {
+    width: 22px;
+    height: 22px;
+    stroke: #fbbf24;
+    fill: none;
+    stroke-width: 1.8;
+}
+.gold-rate-widget .grw-live-pill {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(34,197,94,0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34,197,94,0.3);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.gold-rate-widget .grw-live-pill .pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: grwPulse 1.4s infinite;
+}
+@keyframes grwPulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.4); }
+}
+.gold-rate-widget .grw-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+}
+.gold-rate-widget .grw-input-row > div { flex: 1; min-width: 140px; }
+.gold-rate-widget .grw-input-row label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+    opacity: 0.9;
+}
+.gold-rate-widget .grw-input-row input {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(251,191,36,0.15);
+}
+.gold-rate-widget .grw-input-row input:focus {
+    box-shadow: 0 0 0 2px rgba(251,191,36,0.35);
+}
+.gold-rate-widget .grw-fetch-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #1a1a1a;
+    font-weight: 700;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 1.2rem;
+    cursor: pointer;
+    align-self: flex-end;
+    letter-spacing: 0.3px;
+    transition: 0.2s;
+    box-shadow: 0 4px 14px -2px rgba(245,158,11,0.4);
+    white-space: nowrap;
+}
+.gold-rate-widget .grw-fetch-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.gold-rate-widget .grw-fetch-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.gold-rate-widget .grw-location-info {
+    font-size: 0.75rem;
+    color: #cbd5e1;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.gold-rate-widget .grw-location-info strong { color: #fbbf24; font-weight: 600; }
+.gold-rate-widget .grw-status {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 0.7rem;
+    margin-bottom: 0.8rem;
+    display: none;
+}
+.gold-rate-widget .grw-status.show { display: block; }
+.gold-rate-widget .grw-status.error { color: #fca5a5; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); }
+.gold-rate-widget .grw-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 0.8rem;
+}
+.gold-rate-widget .grw-card {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 1rem;
+    padding: 12px;
+    text-align: center;
+    transition: 0.2s;
+    cursor: pointer;
+    position: relative;
+}
+.gold-rate-widget .grw-card:hover {
+    border-color: rgba(251,191,36,0.4);
+    transform: translateY(-2px);
+    background: rgba(251,191,36,0.05);
+}
+.gold-rate-widget .grw-card.selected {
+    border-color: #fbbf24;
+    background: rgba(251,191,36,0.1);
+    box-shadow: 0 0 0 2px rgba(251,191,36,0.3);
+}
+.gold-rate-widget .grw-card .carat {
+    font-size: 0.7rem;
+    color: #fbbf24;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed rgba(251,191,36,0.2);
+}
+.gold-rate-widget .grw-card .rate-block {
+    padding: 6px 0;
+    margin-bottom: 4px;
+}
+.gold-rate-widget .grw-card .rate-block + .rate-block {
+    border-top: 1px dashed rgba(255,255,255,0.1);
+    margin-top: 4px;
+    padding-top: 8px;
+}
+.gold-rate-widget .grw-card .rate-block .rate-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    display: inline-block;
+}
+.gold-rate-widget .grw-card .rate-ex .rate-label {
+    background: rgba(148,163,184,0.15);
+    color: #cbd5e1;
+}
+.gold-rate-widget .grw-card .rate-inc .rate-label {
+    background: rgba(251,191,36,0.15);
+    color: #fbbf24;
+}
+.gold-rate-widget .grw-card .rate-block .rate {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #f1f5f9;
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+.gold-rate-widget .grw-card .rate-inc .rate { color: #fbbf24; }
+.gold-rate-widget .grw-card .rate-block .per {
+    font-size: 0.6rem;
+    color: #94a3b8;
+    letter-spacing: 0.3px;
+}
+.gold-rate-widget .grw-card .rate-block .per10g {
+    font-size: 0.65rem;
+    color: #cbd5e1;
+    margin-top: 3px;
+}
+.gold-rate-widget .grw-card .gst-line {
+    font-size: 0.62rem;
+    color: #94a3b8;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(255,255,255,0.08);
+    font-style: italic;
+}
+/* view toggle */
+.gold-rate-widget .grw-view-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+    background: rgba(0,0,0,0.2);
+    padding: 6px 10px;
+    border-radius: 999px;
+    width: fit-content;
+}
+.gold-rate-widget .grw-toggle-label {
+    font-size: 0.7rem;
+    color: #cbd5e1;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+}
+.gold-rate-widget .grw-toggle-btn {
+    background: transparent;
+    color: #cbd5e1;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.gold-rate-widget .grw-toggle-btn:hover { background: rgba(255,255,255,0.06); }
+.gold-rate-widget .grw-toggle-btn.active {
+    background: #fbbf24;
+    color: #0f172a;
+}
+.gold-rate-widget .grw-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+.gold-rate-widget .grw-updated {
+    font-size: 0.7rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.gold-rate-widget .grw-use-btn {
+    background: #fbbf24;
+    color: #0f172a;
+    font-weight: 700;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+.gold-rate-widget .grw-use-btn.show { display: inline-flex; }
+.gold-rate-widget .grw-use-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.gold-rate-widget .grw-use-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+.gold-rate-widget .grw-disclaimer {
+    font-size: 0.65rem;
+    color: #64748b;
+    margin-top: 8px;
+    line-height: 1.4;
+    font-style: italic;
+}
+body.light-mode .gold-rate-widget {
+    background: linear-gradient(135deg, rgba(245,158,11,0.12) 0%, rgba(217,119,6,0.06) 100%);
+    border-color: rgba(217,119,6,0.35);
+    box-shadow: 0 8px 24px -10px rgba(217,119,6,0.25);
+}
+body.light-mode .gold-rate-widget .grw-title { color: #b45309; }
+body.light-mode .gold-rate-widget .grw-title svg { stroke: #b45309; }
+body.light-mode .gold-rate-widget .grw-input-row label { color: #475569; }
+body.light-mode .gold-rate-widget .grw-input-row input {
+    background: rgba(255,255,255,0.85) !important;
+    color: #1e293b !important;
+    border-color: rgba(217,119,6,0.3);
+}
+body.light-mode .gold-rate-widget .grw-input-row input::placeholder { color: #94a3b8; }
+body.light-mode .gold-rate-widget .grw-fetch-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #1a1a1a;
+}
+body.light-mode .gold-rate-widget .grw-location-info { color: #475569; }
+body.light-mode .gold-rate-widget .grw-location-info strong { color: #b45309; }
+body.light-mode .gold-rate-widget .grw-status {
+    background: rgba(0,0,0,0.04);
+    color: #475569;
+}
+body.light-mode .gold-rate-widget .grw-status.error {
+    background: rgba(220,38,38,0.08);
+    color: #b91c1c;
+    border-color: rgba(220,38,38,0.25);
+}
+body.light-mode .gold-rate-widget .grw-view-toggle {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(0,0,0,0.08);
+}
+body.light-mode .gold-rate-widget .grw-toggle-label { color: #475569; }
+body.light-mode .gold-rate-widget .grw-toggle-btn { color: #475569; }
+body.light-mode .gold-rate-widget .grw-toggle-btn:hover { background: rgba(0,0,0,0.06); }
+body.light-mode .gold-rate-widget .grw-toggle-btn.active {
+    background: #d97706;
+    color: #ffffff;
+}
+body.light-mode .gold-rate-widget .grw-card {
+    background: rgba(255,255,255,0.75);
+    border-color: rgba(0,0,0,0.08);
+}
+body.light-mode .gold-rate-widget .grw-card:hover {
+    border-color: rgba(217,119,6,0.45);
+    background: rgba(245,158,11,0.08);
+}
+body.light-mode .gold-rate-widget .grw-card.selected {
+    border-color: #d97706;
+    background: rgba(245,158,11,0.12);
+    box-shadow: 0 0 0 2px rgba(217,119,6,0.35);
+}
+body.light-mode .gold-rate-widget .grw-card .carat {
+    color: #b45309;
+    border-bottom-color: rgba(217,119,6,0.25);
+}
+body.light-mode .gold-rate-widget .grw-card .rate-block + .rate-block {
+    border-top-color: rgba(0,0,0,0.1);
+}
+body.light-mode .gold-rate-widget .grw-card .rate-ex .rate-label {
+    background: rgba(71,85,105,0.12);
+    color: #475569;
+}
+body.light-mode .gold-rate-widget .grw-card .rate-inc .rate-label {
+    background: rgba(217,119,6,0.15);
+    color: #b45309;
+}
+body.light-mode .gold-rate-widget .grw-card .rate-block .rate { color: #0f172a; }
+body.light-mode .gold-rate-widget .grw-card .rate-inc .rate { color: #b45309; }
+body.light-mode .gold-rate-widget .grw-card .rate-block .per { color: #64748b; }
+body.light-mode .gold-rate-widget .grw-card .rate-block .per10g { color: #475569; }
+body.light-mode .gold-rate-widget .grw-card .gst-line {
+    color: #64748b;
+    border-top-color: rgba(0,0,0,0.1);
+}
+body.light-mode .gold-rate-widget .grw-updated { color: #64748b; }
+body.light-mode .gold-rate-widget .grw-use-btn {
+    background: #d97706;
+    color: #ffffff;
+}
+body.light-mode .gold-rate-widget .grw-use-btn:hover { filter: brightness(1.05); }
+body.light-mode .gold-rate-widget .grw-disclaimer { color: #64748b; }
 </style>
 </head>
 <body>
@@ -961,6 +1353,7 @@ body.light-mode .history-share-btn:hover {
         <button class="tab-btn" onclick="switchTab('gst')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span>GST</span></button>
         <button class="tab-btn active" onclick="switchTab('pergram')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 12H4M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/></svg><span>Per Gram</span></button>
         <button class="tab-btn" onclick="switchTab('discount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 15l6-6"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg><span>Discount</span></button>
+        <button class="tab-btn" onclick="switchTab('goldrate')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg><span>Gold Rate</span></button>
     </div>
 
     <!-- Panel 1: GST -->
@@ -998,6 +1391,53 @@ body.light-mode .history-share-btn:hover {
             <div class="action-btns"><button class="action add" onclick="calcDiscount()">Apply Discount</button><button class="action secondary" onclick="clearDiscount()">Reset</button></div>
             <button class="add-to-comparison-btn" id="addDiscountToComparison" onclick="addToComparison('discount')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison</button></div>
             <div class="result"><div class="result-item"><span>Original Price</span><span id="originalDisplay">₹0.00</span></div><div class="result-item"><span>You Save</span><span id="savedAmount" style="color:#f97316; font-weight:700">₹0.00</span></div><hr><div class="result-item"><span>Final Price</span><span class="total" id="finalPrice">₹0.00</span></div><div class="result-item"><span>Discount %</span><span id="effectivePercent">0%</span></div></div>
+        </div>
+    </div>
+
+    <!-- Panel 4: Gold Rate -->
+    <div id="panel-goldrate" class="tab-panel" style="display:none">
+        <div class="gold-rate-widget" id="goldRateWidget">
+            <div class="grw-header">
+                <div class="grw-title">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg>
+                    Live Gold Rate by Location
+                </div>
+                <span class="grw-live-pill"><span class="pulse"></span> Live</span>
+            </div>
+
+            <div class="grw-input-row">
+                <div>
+                    <label>Pincode or City</label>
+                    <input type="text" id="grwLocationInput" placeholder="e.g. 560001 or Mumbai" inputmode="numeric">
+                </div>
+                <button class="grw-fetch-btn" id="grwFetchBtn" onclick="fetchGoldRates()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                    Get Today's Rates
+                </button>
+            </div>
+
+            <div class="grw-location-info" id="grwLocationInfo" style="display:none"></div>
+            <div class="grw-status" id="grwStatus"></div>
+
+            <!-- GST toggle: show ex / inc / both -->
+            <div class="grw-view-toggle" id="grwViewToggle" style="display:none">
+                <span class="grw-toggle-label">View:</span>
+                <button data-view="both" class="grw-toggle-btn active" onclick="setGoldView('both')">Both</button>
+                <button data-view="ex" class="grw-toggle-btn" onclick="setGoldView('ex')">Ex-GST</button>
+                <button data-view="inc" class="grw-toggle-btn" onclick="setGoldView('inc')">Inc-GST (MRP)</button>
+            </div>
+
+            <div class="grw-cards" id="grwCards" style="display:none"></div>
+
+            <div class="grw-footer" id="grwFooter" style="display:none">
+                <span class="grw-updated" id="grwUpdated"></span>
+                <button class="grw-use-btn" id="grwUseBtn" onclick="useSelectedGoldRate()">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    Use Selected Rate in Per-Gram
+                </button>
+            </div>
+
+            <div class="grw-disclaimer">Rates derived from live spot gold price + city markup + 3% GST. Ex-GST = base gold value; Inc-GST (MRP) = final retail price including 3% GST. For indication only — confirm with your local jeweller for exact billing rate.</div>
         </div>
     </div>
 </div>
@@ -1179,7 +1619,9 @@ window.switchTab = function(tab){
     document.getElementById('panel-gst').style.display = tab==='gst' ? 'block' : 'none';
     document.getElementById('panel-pergram').style.display = tab==='pergram' ? 'block' : 'none';
     document.getElementById('panel-discount').style.display = tab==='discount' ? 'block' : 'none';
-    document.querySelectorAll('.tab-btn').forEach((btn,i)=>{ if((tab==='gst' && i===0)||(tab==='pergram'&&i===1)||(tab==='discount'&&i===2)) btn.classList.add('active'); else btn.classList.remove('active'); });
+    document.getElementById('panel-goldrate').style.display = tab==='goldrate' ? 'block' : 'none';
+    const tabMap = {'gst':0,'pergram':1,'discount':2,'goldrate':3};
+    document.querySelectorAll('.tab-btn').forEach((btn,i)=>{ if(tabMap[tab]===i) btn.classList.add('active'); else btn.classList.remove('active'); });
     closeAllDropdowns(); miniDialog.classList.remove('show'); document.getElementById('historyDialog')?.classList.remove('show'); comparisonDialog?.classList.remove('show');
 };
 switchTab('pergram'); renderHistory();
@@ -1489,6 +1931,324 @@ document.querySelectorAll('.tooltip-icon').forEach(icon => {
         setTimeout(() => { if(anyDialogOpen()) pushDialogState(); }, 50);
     });
 });
+
+// ===================== LIVE GOLD RATE WIDGET =====================
+const GRW = {
+    carats: [
+        { label: '24K', purity: 999, name: 'Pure Gold' },
+        { label: '22K', purity: 916, name: 'Standard Jewellery' },
+        { label: '20K', purity: 833, name: 'Light Jewellery' },
+        { label: '18K', purity: 750, name: 'Mid-range' },
+        { label: '14K', purity: 585, name: 'Economical' }
+    ],
+    // City-level retail markup factors over spot price (covers local making charges + taxes + margins)
+    cityMarkups: {
+        'mumbai': 1.06, 'delhi': 1.07, 'kolkata': 1.055, 'chennai': 1.065,
+        'bangalore': 1.058, 'bengaluru': 1.058, 'hyderabad': 1.062, 'pune': 1.057,
+        'ahmedabad': 1.055, 'jaipur': 1.063, 'lucknow': 1.061, 'kochi': 1.067,
+        'coimbatore': 1.064, 'surat': 1.056, 'kanpur': 1.060, 'nagpur': 1.058,
+        'indore': 1.057, 'bhopal': 1.059, 'patna': 1.062, 'visakhapatnam': 1.061,
+        'varanasi': 1.063, 'madurai': 1.065, 'nashik': 1.057, 'vadodara': 1.056,
+        'ghaziabad': 1.060, 'ludhiana': 1.061, 'agra': 1.062, 'faridabad': 1.060
+    },
+    selectedCarat: null,
+    selectedRate: null,
+    cacheKey: 'calcdeck_gold_cache_v1',
+    cacheTTL: 15 * 60 * 1000  // 15 minutes
+};
+
+// Enter key triggers fetch
+document.getElementById('grwLocationInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') fetchGoldRates();
+});
+
+function grwShowStatus(msg, isError) {
+    const el = document.getElementById('grwStatus');
+    el.textContent = msg;
+    el.classList.add('show');
+    el.classList.toggle('error', !!isError);
+}
+function grwHideStatus() {
+    const el = document.getElementById('grwStatus');
+    el.classList.remove('show', 'error');
+    el.textContent = '';
+}
+
+// Step 1: Resolve pincode → city/district using free postalpincode.in API
+async function resolveLocation(input) {
+    const trimmed = (input || '').trim();
+    if (!trimmed) return { error: 'Please enter a pincode or city name.' };
+
+    // If pure digits 6 chars → pincode lookup
+    if (/^\d{6}$/.test(trimmed)) {
+        try {
+            const resp = await fetch(`https://api.postalpincode.in/pincode/${trimmed}`);
+            const data = await resp.json();
+            if (Array.isArray(data) && data[0] && data[0].PostOffice && data[0].PostOffice.length) {
+                const po = data[0].PostOffice[0];
+                return {
+                    city: po.District || po.Block || po.Region,
+                    state: po.State,
+                    country: po.Country,
+                    pincode: trimmed,
+                    display: `${po.District || po.Block}, ${po.State}`
+                };
+            }
+            return { error: 'Pincode not found. Please check and try again.' };
+        } catch (e) {
+            return { error: 'Could not verify pincode (network error). Showing India average rate.' };
+        }
+    }
+    // Otherwise treat as city name
+    return {
+        city: trimmed,
+        display: trimmed,
+        country: 'India'
+    };
+}
+
+// Step 2: Fetch live gold spot price in INR per gram (multiple fallback sources)
+async function fetchSpotGoldPrice() {
+    // Check cache first
+    try {
+        const cached = JSON.parse(localStorage.getItem(GRW.cacheKey) || 'null');
+        if (cached && (Date.now() - cached.ts) < GRW.cacheTTL) {
+            return { price: cached.price, source: cached.source, cached: true };
+        }
+    } catch (e) {}
+
+    // Source 1: gold-api.com (free, no key, returns spot in USD/oz)
+    const sources = [
+        {
+            name: 'gold-api.com',
+            url: 'https://api.gold-api.com/price/XAU',
+            parse: async (d) => {
+                // returns { price: <USD per ounce>, name, symbol, ... }
+                const usdPerOz = parseFloat(d.price);
+                if (!usdPerOz) throw new Error('Invalid price');
+                const usdInr = await fetchUsdInrRate();
+                const inrPerGram = (usdPerOz / 31.1035) * usdInr;
+                return inrPerGram;
+            }
+        },
+        {
+            name: 'metalpriceapi (demo)',
+            url: 'https://api.metalpriceapi.com/v1/latest?api_key=demo&base=USD&currencies=INR,XAU',
+            parse: (d) => {
+                // returns rates: { INR: 83, XAU: 0.00051 (oz per USD) } — derive INR per gram of XAU
+                if (!d || !d.rates) throw new Error('No rates');
+                const inrPerUsd = d.rates.INR;
+                const usdPerOz = 1 / d.rates.XAU;  // XAU is oz per USD, so USD per oz = 1/XAU
+                return (usdPerOz / 31.1035) * inrPerUsd;
+            }
+        }
+    ];
+
+    for (const src of sources) {
+        try {
+            const resp = await fetch(src.url);
+            if (!resp.ok) continue;
+            const data = await resp.json();
+            const price = typeof src.parse === 'function'
+                ? (src.parse.constructor.name === 'AsyncFunction' ? await src.parse(data) : src.parse(data))
+                : null;
+            if (price && price > 0 && price < 100000) {
+                // save cache
+                localStorage.setItem(GRW.cacheKey, JSON.stringify({ price, source: src.name, ts: Date.now() }));
+                return { price, source: src.name, cached: false };
+            }
+        } catch (e) { /* try next */ }
+    }
+
+    // Fallback: use a reasonable recent indicative rate (clearly marked)
+    return { price: 7250, source: 'indicative-fallback', cached: false, fallback: true };
+}
+
+// Helper: fetch USD→INR FX rate
+async function fetchUsdInrRate() {
+    try {
+        const r = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const d = await r.json();
+        if (d && d.rates && d.rates.INR) return d.rates.INR;
+    } catch (e) {}
+    return 83.5; // sensible fallback
+}
+
+// Main entry: triggered by "Get Today's Rates" button
+async function fetchGoldRates() {
+    const input = document.getElementById('grwLocationInput').value;
+    const btn = document.getElementById('grwFetchBtn');
+    if (!input.trim()) {
+        grwShowStatus('Please enter a pincode or city name.', true);
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="animation:grwSpin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Fetching...';
+    // inject spin keyframe if missing
+    if (!document.getElementById('grwSpinStyle')) {
+        const s = document.createElement('style');
+        s.id = 'grwSpinStyle';
+        s.textContent = '@keyframes grwSpin{to{transform:rotate(360deg)}}';
+        document.head.appendChild(s);
+    }
+    grwShowStatus('Resolving location & fetching live gold price...', false);
+
+    const loc = await resolveLocation(input);
+    if (loc.error) {
+        // soft error — still proceed with India average if pincode failed
+        grwShowStatus(loc.error, true);
+    }
+
+    const spot = await fetchSpotGoldPrice();
+    const spotPerGram24k = spot.price;
+
+    // City markup
+    let cityKey = loc.city ? loc.city.toLowerCase().trim() : '';
+    let markup = GRW.cityMarkups[cityKey];
+    if (!markup) {
+        // try matching first 4 chars
+        for (const k in GRW.cityMarkups) {
+            if (cityKey.startsWith(k.slice(0, 4)) || k.startsWith(cityKey.slice(0, 4))) { markup = GRW.cityMarkups[k]; break; }
+        }
+    }
+    if (!markup) markup = 1.06; // India average
+
+    // 24K base rate per gram (ex-GST) = spot × city markup
+    const GST_RATE = 0.03;
+    const base24kPerGramExGst = spotPerGram24k * markup;
+    const base24kPerGramIncGst = base24kPerGramExGst * (1 + GST_RATE);
+
+    // Compute all carats using purity ratio
+    const rates = GRW.carats.map(c => {
+        const perGramEx = base24kPerGramExGst * (c.purity / 999);
+        const perGramInc = base24kPerGramIncGst * (c.purity / 999);
+        return {
+            ...c,
+            perGramEx: Math.round(perGramEx),
+            perGramInc: Math.round(perGramInc),
+            per10gEx: Math.round(perGramEx * 10),
+            per10gInc: Math.round(perGramInc * 10),
+            gstAmount: Math.round(perGramInc - perGramEx)
+        };
+    });
+
+    // Render
+    grwHideStatus();
+    renderGoldRateCards(rates, loc, spot);
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Refresh Rates';
+}
+
+function renderGoldRateCards(rates, loc, spot) {
+    // Location info
+    const locEl = document.getElementById('grwLocationInfo');
+    locEl.style.display = 'flex';
+    locEl.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Location: <strong>${loc.display || 'India (avg)'}</strong>${loc.pincode ? ` &middot; PIN: <strong>${loc.pincode}</strong>` : ''}${loc.state ? ` &middot; ${loc.state}` : ''}`;
+
+    // Show view toggle
+    document.getElementById('grwViewToggle').style.display = 'flex';
+
+    // Cards
+    const cardsEl = document.getElementById('grwCards');
+    cardsEl.style.display = 'grid';
+    cardsEl.innerHTML = rates.map((r, i) => `
+        <div class="grw-card" data-index="${i}" onclick="selectGoldRate(${i})">
+            <div class="carat">${r.label} &middot; ${r.purity}</div>
+            <div class="rate-block rate-ex">
+                <div class="rate-label">Ex-GST</div>
+                <div class="rate">₹${r.perGramEx.toLocaleString('en-IN')}</div>
+                <div class="per">per gram</div>
+                <div class="per10g">₹${r.per10gEx.toLocaleString('en-IN')} / 10g</div>
+            </div>
+            <div class="rate-block rate-inc">
+                <div class="rate-label">Inc-GST (MRP)</div>
+                <div class="rate">₹${r.perGramInc.toLocaleString('en-IN')}</div>
+                <div class="per">per gram</div>
+                <div class="per10g">₹${r.per10gInc.toLocaleString('en-IN')} / 10g</div>
+            </div>
+            <div class="gst-line">+₹${r.gstAmount.toLocaleString('en-IN')} GST/g (3%)</div>
+        </div>
+    `).join('');
+
+    // Footer
+    const footer = document.getElementById('grwFooter');
+    footer.style.display = 'flex';
+    const updated = document.getElementById('grwUpdated');
+    const srcLabel = spot.source === 'indicative-fallback' ? 'indicative rate (live API unreachable)'
+                   : spot.cached ? `cached from ${spot.source}`
+                   : `via ${spot.source}`;
+    const time = new Date().toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' });
+    updated.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Updated ${time} &middot; ${srcLabel}`;
+
+    // Store for selection
+    GRW._lastRates = rates;
+
+    // Auto-select 22K (most common) for convenience
+    selectGoldRate(1);
+
+    // Apply current view mode
+    setGoldView(GRW._viewMode || 'both');
+
+    if (spot.fallback) {
+        grwShowStatus('Live API unreachable — showing indicative reference rate. Try refreshing in a moment.', true);
+    }
+}
+
+// View toggle: show Both / Ex-GST only / Inc-GST only
+function setGoldView(mode) {
+    GRW._viewMode = mode;
+    document.querySelectorAll('.grw-toggle-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.view === mode);
+    });
+    const cards = document.querySelectorAll('.grw-card');
+    cards.forEach(card => {
+        const exBlock = card.querySelector('.rate-ex');
+        const incBlock = card.querySelector('.rate-inc');
+        if (mode === 'ex') { exBlock.style.display = 'block'; incBlock.style.display = 'none'; }
+        else if (mode === 'inc') { exBlock.style.display = 'none'; incBlock.style.display = 'block'; }
+        else { exBlock.style.display = 'block'; incBlock.style.display = 'block'; }
+    });
+}
+
+function selectGoldRate(index) {
+    GRW._lastRates.forEach((r, i) => {
+        const card = document.querySelector(`.grw-card[data-index="${i}"]`);
+        if (card) card.classList.toggle('selected', i === index);
+    });
+    GRW.selectedCarat = GRW._lastRates[index];
+    document.getElementById('grwUseBtn').classList.add('show');
+}
+
+// Plug the selected rate into the Per-Gram calculator
+function useSelectedGoldRate() {
+    if (!GRW.selectedCarat) return;
+    const priceInput = document.getElementById('pgPrice');
+    const weightInput = document.getElementById('pgWeight');
+
+    // Use the inc-GST (MRP) rate by default, since that's the final retail price.
+    // If user is in 'ex' view mode, use ex-GST rate instead so they get what they see.
+    const useInc = GRW._viewMode !== 'ex';
+    const perGram = useInc ? GRW.selectedCarat.perGramInc : GRW.selectedCarat.perGramEx;
+    const per10g = useInc ? GRW.selectedCarat.per10gInc : GRW.selectedCarat.per10gEx;
+
+    priceInput.value = per10g;
+    weightInput.value = 10;
+    // Set unit to grams
+    setUnit('g', 'Gram (g)');
+
+    // Switch to pergram tab so user sees the calculation
+    switchTab('pergram');
+
+    // Trigger calculation
+    calcPerGram();
+
+    // Visual feedback
+    const btn = document.getElementById('grwUseBtn');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Applied!';
+    setTimeout(() => { btn.innerHTML = original; }, 1800);
+}
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js').catch(e=>console);
 </script>
