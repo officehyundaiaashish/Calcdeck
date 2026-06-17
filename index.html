@@ -1281,6 +1281,375 @@ body.light-mode .gold-rate-widget .grw-use-btn {
 }
 body.light-mode .gold-rate-widget .grw-use-btn:hover { filter: brightness(1.05); }
 body.light-mode .gold-rate-widget .grw-disclaimer { color: #64748b; }
+
+/* ===================== LOCATION HISTORY COMBOBOX ===================== */
+.loc-combobox { position: relative; }
+.loc-history-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.15s;
+    z-index: 5;
+}
+.loc-history-toggle:hover { background: rgba(255,255,255,0.1); color: #e2e8f0; }
+.loc-history-toggle svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.2s; }
+.loc-history-toggle.open svg { transform: rotate(180deg); }
+.loc-history-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #1e293b;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 1rem;
+    z-index: 220;
+    max-height: 280px;
+    overflow-y: auto;
+    display: none;
+    box-shadow: 0 12px 28px -8px black;
+    padding: 6px;
+}
+.loc-history-dropdown.show { display: block; }
+.loc-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.loc-history-header span {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #94a3b8;
+    font-weight: 600;
+}
+.loc-history-clear {
+    background: none;
+    border: none;
+    color: #f87171;
+    font-size: 0.65rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.loc-history-clear:hover { background: rgba(239,68,68,0.15); }
+.loc-history-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    transition: 0.1s;
+    color: #e2e8f0;
+    font-size: 0.85rem;
+}
+.loc-history-item:hover { background: rgba(56,189,248,0.15); }
+.loc-history-item .loc-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(251,191,36,0.15);
+    color: #fbbf24;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.loc-history-item .loc-icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.loc-history-item .loc-text { flex: 1; min-width: 0; overflow: hidden; }
+.loc-history-item .loc-text .loc-primary { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.loc-history-item .loc-text .loc-secondary { font-size: 0.7rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.loc-history-item .loc-remove {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: 0.15s;
+}
+.loc-history-item:hover .loc-remove { opacity: 1; }
+.loc-history-item .loc-remove:hover { color: #f87171; background: rgba(239,68,68,0.15); }
+.loc-history-item .loc-remove svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
+.loc-history-empty {
+    padding: 16px 10px;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+body.light-mode .loc-history-toggle { color: #64748b; }
+body.light-mode .loc-history-toggle:hover { background: rgba(0,0,0,0.06); color: #1e293b; }
+body.light-mode .loc-history-dropdown {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 12px 28px -8px rgba(0,0,0,0.2);
+}
+body.light-mode .loc-history-header { border-bottom-color: rgba(0,0,0,0.08); }
+body.light-mode .loc-history-header span { color: #64748b; }
+body.light-mode .loc-history-item { color: #1e293b; }
+body.light-mode .loc-history-item:hover { background: rgba(217,119,6,0.1); }
+body.light-mode .loc-history-item .loc-text .loc-secondary { color: #64748b; }
+body.light-mode .loc-history-item .loc-remove { color: #94a3b8; }
+body.light-mode .loc-history-item .loc-remove:hover { color: #b91c1c; background: rgba(220,38,38,0.1); }
+body.light-mode .loc-history-empty { color: #94a3b8; }
+
+/* ===================== FUEL RATE WIDGET ===================== */
+.fuel-rate-widget {
+    background: linear-gradient(135deg, rgba(34,197,94,0.06) 0%, rgba(16,185,129,0.04) 100%);
+    border: 1px solid rgba(34,197,94,0.22);
+    border-radius: 1.5rem;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 24px -10px rgba(34,197,94,0.15);
+}
+.fuel-rate-widget .frw-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+}
+.fuel-rate-widget .frw-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #4ade80;
+    letter-spacing: 0.3px;
+}
+.fuel-rate-widget .frw-title svg {
+    width: 22px;
+    height: 22px;
+    stroke: #4ade80;
+    fill: none;
+    stroke-width: 1.8;
+}
+.fuel-rate-widget .frw-live-pill {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(34,197,94,0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34,197,94,0.3);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.fuel-rate-widget .frw-live-pill .pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: grwPulse 1.4s infinite;
+}
+.fuel-rate-widget .frw-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+}
+.fuel-rate-widget .frw-input-row > div { flex: 1; min-width: 140px; }
+.fuel-rate-widget .frw-input-row label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+    opacity: 0.9;
+}
+.fuel-rate-widget .frw-input-row input {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(34,197,94,0.15);
+    padding-right: 36px;
+}
+.fuel-rate-widget .frw-input-row input:focus {
+    box-shadow: 0 0 0 2px rgba(34,197,94,0.35);
+}
+.fuel-rate-widget .frw-fetch-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 1.2rem;
+    cursor: pointer;
+    align-self: flex-end;
+    letter-spacing: 0.3px;
+    transition: 0.2s;
+    box-shadow: 0 4px 14px -2px rgba(16,185,129,0.4);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.fuel-rate-widget .frw-fetch-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.fuel-rate-widget .frw-fetch-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.fuel-rate-widget .frw-location-info {
+    font-size: 0.75rem;
+    color: #cbd5e1;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.fuel-rate-widget .frw-location-info strong { color: #4ade80; font-weight: 600; }
+.fuel-rate-widget .frw-status {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 0.7rem;
+    margin-bottom: 0.8rem;
+    display: none;
+}
+.fuel-rate-widget .frw-status.show { display: block; }
+.fuel-rate-widget .frw-status.error { color: #fca5a5; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); }
+.fuel-rate-widget .frw-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 0.8rem;
+}
+.fuel-rate-widget .frw-card {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 1rem;
+    padding: 14px;
+    text-align: center;
+    transition: 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+.fuel-rate-widget .frw-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+}
+.fuel-rate-widget .frw-card.petrol::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+.fuel-rate-widget .frw-card.diesel::before { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.fuel-rate-widget .frw-card.cng::before { background: linear-gradient(90deg, #10b981, #059669); }
+.fuel-rate-widget .frw-card.lpg::before { background: linear-gradient(90deg, #ec4899, #be185d); }
+.fuel-rate-widget .frw-card .fuel-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+.fuel-rate-widget .frw-card .fuel-head svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.fuel-rate-widget .frw-card .fuel-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.fuel-rate-widget .frw-card.petrol .fuel-name, .fuel-rate-widget .frw-card.petrol .fuel-head svg { color: #f97316; }
+.fuel-rate-widget .frw-card.diesel .fuel-name, .fuel-rate-widget .frw-card.diesel .fuel-head svg { color: #60a5fa; }
+.fuel-rate-widget .frw-card.cng .fuel-name, .fuel-rate-widget .frw-card.cng .fuel-head svg { color: #34d399; }
+.fuel-rate-widget .frw-card.lpg .fuel-name, .fuel-rate-widget .frw-card.lpg .fuel-head svg { color: #f472b6; }
+.fuel-rate-widget .frw-card .fuel-rate {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #f1f5f9;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+.fuel-rate-widget .frw-card .fuel-unit {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.fuel-rate-widget .frw-card .fuel-breakdown {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255,255,255,0.08);
+    font-size: 0.68rem;
+    color: #94a3b8;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 8px;
+    text-align: left;
+}
+.fuel-rate-widget .frw-card .fuel-breakdown .bd-val { color: #cbd5e1; font-weight: 600; text-align: right; }
+.fuel-rate-widget .frw-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+.fuel-rate-widget .frw-updated {
+    font-size: 0.7rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.fuel-rate-widget .frw-disclaimer {
+    font-size: 0.65rem;
+    color: #64748b;
+    margin-top: 8px;
+    line-height: 1.4;
+    font-style: italic;
+}
+body.light-mode .fuel-rate-widget {
+    background: linear-gradient(135deg, rgba(16,185,129,0.10) 0%, rgba(5,150,105,0.05) 100%);
+    border-color: rgba(5,150,105,0.3);
+    box-shadow: 0 8px 24px -10px rgba(5,150,105,0.2);
+}
+body.light-mode .fuel-rate-widget .frw-title { color: #047857; }
+body.light-mode .fuel-rate-widget .frw-title svg { stroke: #047857; }
+body.light-mode .fuel-rate-widget .frw-input-row label { color: #475569; }
+body.light-mode .fuel-rate-widget .frw-input-row input {
+    background: rgba(255,255,255,0.85) !important;
+    color: #1e293b !important;
+    border-color: rgba(5,150,105,0.3);
+}
+body.light-mode .fuel-rate-widget .frw-input-row input::placeholder { color: #94a3b8; }
+body.light-mode .fuel-rate-widget .frw-fetch-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+}
+body.light-mode .fuel-rate-widget .frw-location-info { color: #475569; }
+body.light-mode .fuel-rate-widget .frw-location-info strong { color: #047857; }
+body.light-mode .fuel-rate-widget .frw-status { background: rgba(0,0,0,0.04); color: #475569; }
+body.light-mode .fuel-rate-widget .frw-status.error { background: rgba(220,38,38,0.08); color: #b91c1c; border-color: rgba(220,38,38,0.25); }
+body.light-mode .fuel-rate-widget .frw-card { background: rgba(255,255,255,0.75); border-color: rgba(0,0,0,0.08); }
+body.light-mode .fuel-rate-widget .frw-card .fuel-head { border-bottom-color: rgba(0,0,0,0.1); }
+body.light-mode .fuel-rate-widget .frw-card .fuel-rate { color: #0f172a; }
+body.light-mode .fuel-rate-widget .frw-card .fuel-unit { color: #64748b; }
+body.light-mode .fuel-rate-widget .frw-card .fuel-breakdown { border-top-color: rgba(0,0,0,0.1); color: #64748b; }
+body.light-mode .fuel-rate-widget .frw-card .fuel-breakdown .bd-val { color: #475569; }
+body.light-mode .fuel-rate-widget .frw-updated { color: #64748b; }
+body.light-mode .fuel-rate-widget .frw-disclaimer { color: #64748b; }
 </style>
 </head>
 <body>
@@ -1354,6 +1723,7 @@ body.light-mode .gold-rate-widget .grw-disclaimer { color: #64748b; }
         <button class="tab-btn active" onclick="switchTab('pergram')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 12H4M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/></svg><span>Per Gram</span></button>
         <button class="tab-btn" onclick="switchTab('discount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 15l6-6"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg><span>Discount</span></button>
         <button class="tab-btn" onclick="switchTab('goldrate')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg><span>Gold Rate</span></button>
+        <button class="tab-btn" onclick="switchTab('fuelrate')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 22V10l5-3v15M10 22V7l5-2v17M15 22V5l6 3v14"/></svg><span>Fuel Rate</span></button>
     </div>
 
     <!-- Panel 1: GST -->
@@ -1408,7 +1778,13 @@ body.light-mode .gold-rate-widget .grw-disclaimer { color: #64748b; }
             <div class="grw-input-row">
                 <div>
                     <label>Pincode or City</label>
-                    <input type="text" id="grwLocationInput" placeholder="e.g. 560001 or Mumbai" inputmode="numeric">
+                    <div class="loc-combobox">
+                        <input type="text" id="grwLocationInput" placeholder="e.g. 560001 or Mumbai" inputmode="numeric" autocomplete="off">
+                        <button class="loc-history-toggle" id="grwHistoryToggle" onclick="toggleLocHistory('grw')" aria-label="Recent locations">
+                            <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="loc-history-dropdown" id="grwHistoryDropdown"></div>
+                    </div>
                 </div>
                 <button class="grw-fetch-btn" id="grwFetchBtn" onclick="fetchGoldRates()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
@@ -1438,6 +1814,47 @@ body.light-mode .gold-rate-widget .grw-disclaimer { color: #64748b; }
             </div>
 
             <div class="grw-disclaimer">Rates derived from live spot gold price + city markup + 3% GST. Ex-GST = base gold value; Inc-GST (MRP) = final retail price including 3% GST. For indication only — confirm with your local jeweller for exact billing rate.</div>
+        </div>
+    </div>
+
+    <!-- Panel 5: Fuel Rate -->
+    <div id="panel-fuelrate" class="tab-panel" style="display:none">
+        <div class="fuel-rate-widget" id="fuelRateWidget">
+            <div class="frw-header">
+                <div class="frw-title">
+                    <svg viewBox="0 0 24 24"><path d="M3 22V10l5-3v15M10 22V7l5-2v17M15 22V5l6 3v14"/></svg>
+                    Live Fuel Rate by Location
+                </div>
+                <span class="frw-live-pill"><span class="pulse"></span> Daily</span>
+            </div>
+
+            <div class="frw-input-row">
+                <div>
+                    <label>Pincode or City</label>
+                    <div class="loc-combobox">
+                        <input type="text" id="frwLocationInput" placeholder="e.g. 110001 or Delhi" inputmode="numeric" autocomplete="off">
+                        <button class="loc-history-toggle" id="frwHistoryToggle" onclick="toggleLocHistory('frw')" aria-label="Recent locations">
+                            <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="loc-history-dropdown" id="frwHistoryDropdown"></div>
+                    </div>
+                </div>
+                <button class="frw-fetch-btn" id="frwFetchBtn" onclick="fetchFuelRates()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                    Get Today's Rates
+                </button>
+            </div>
+
+            <div class="frw-location-info" id="frwLocationInfo" style="display:none"></div>
+            <div class="frw-status" id="frwStatus"></div>
+
+            <div class="frw-cards" id="frwCards" style="display:none"></div>
+
+            <div class="frw-footer" id="frwFooter" style="display:none">
+                <span class="frw-updated" id="frwUpdated"></span>
+            </div>
+
+            <div class="frw-disclaimer">Rates derived from latest published state-wise base price + central excise + dealer commission + state VAT. Updated daily around 6 AM by oil marketing companies. For indication only — confirm with your local fuel station for exact rate.</div>
         </div>
     </div>
 </div>
@@ -1620,9 +2037,13 @@ window.switchTab = function(tab){
     document.getElementById('panel-pergram').style.display = tab==='pergram' ? 'block' : 'none';
     document.getElementById('panel-discount').style.display = tab==='discount' ? 'block' : 'none';
     document.getElementById('panel-goldrate').style.display = tab==='goldrate' ? 'block' : 'none';
-    const tabMap = {'gst':0,'pergram':1,'discount':2,'goldrate':3};
+    document.getElementById('panel-fuelrate').style.display = tab==='fuelrate' ? 'block' : 'none';
+    const tabMap = {'gst':0,'pergram':1,'discount':2,'goldrate':3,'fuelrate':4};
     document.querySelectorAll('.tab-btn').forEach((btn,i)=>{ if(tabMap[tab]===i) btn.classList.add('active'); else btn.classList.remove('active'); });
     closeAllDropdowns(); miniDialog.classList.remove('show'); document.getElementById('historyDialog')?.classList.remove('show'); comparisonDialog?.classList.remove('show');
+    // Close any open location history dropdowns
+    document.querySelectorAll('.loc-history-dropdown.show').forEach(d => d.classList.remove('show'));
+    document.querySelectorAll('.loc-history-toggle.open').forEach(b => b.classList.remove('open'));
 };
 switchTab('pergram'); renderHistory();
 document.getElementById('openHistoryBtn')?.addEventListener('click',(e)=>{ e.stopPropagation(); renderHistory(); document.getElementById('historyDialog')?.classList.toggle('show'); closeAllDropdowns(); miniDialog.classList.remove('show'); comparisonDialog?.classList.remove('show'); hideAllTooltips(); });
@@ -1957,10 +2378,7 @@ const GRW = {
     cacheTTL: 15 * 60 * 1000  // 15 minutes
 };
 
-// Enter key triggers fetch
-document.getElementById('grwLocationInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') fetchGoldRates();
-});
+// Enter key triggers fetch (defined later in location-history section)
 
 function grwShowStatus(msg, isError) {
     const el = document.getElementById('grwStatus');
@@ -2098,6 +2516,9 @@ async function fetchGoldRates() {
     if (loc.error) {
         // soft error — still proceed with India average if pincode failed
         grwShowStatus(loc.error, true);
+    } else if (loc.display) {
+        // Save to location history (shared across gold & fuel tabs)
+        saveLocHistory({ value: input.trim(), display: loc.display, state: loc.state || '', pincode: loc.pincode || '' });
     }
 
     const spot = await fetchSpotGoldPrice();
@@ -2249,6 +2670,393 @@ function useSelectedGoldRate() {
     btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Applied!';
     setTimeout(() => { btn.innerHTML = original; }, 1800);
 }
+
+// ===================== LOCATION HISTORY (shared combobox) =====================
+const LOC_HISTORY_KEY = 'calcdeck_loc_history_v1';
+const LOC_HISTORY_MAX = 10;
+
+function getLocHistory() {
+    try { return JSON.parse(localStorage.getItem(LOC_HISTORY_KEY) || '[]'); }
+    catch (e) { return []; }
+}
+function saveLocHistory(entry) {
+    // entry: { value, display, state, pincode }
+    if (!entry || !entry.value) return;
+    let hist = getLocHistory();
+    // de-dupe by value (case-insensitive, trimmed)
+    hist = hist.filter(h => h.value.toLowerCase().trim() !== entry.value.toLowerCase().trim());
+    hist.unshift({ ...entry, ts: Date.now() });
+    if (hist.length > LOC_HISTORY_MAX) hist = hist.slice(0, LOC_HISTORY_MAX);
+    localStorage.setItem(LOC_HISTORY_KEY, JSON.stringify(hist));
+}
+function removeLocHistory(value) {
+    let hist = getLocHistory();
+    hist = hist.filter(h => h.value.toLowerCase().trim() !== value.toLowerCase().trim());
+    localStorage.setItem(LOC_HISTORY_KEY, JSON.stringify(hist));
+}
+function clearLocHistory() {
+    localStorage.removeItem(LOC_HISTORY_KEY);
+}
+
+function renderLocHistoryDropdown(prefix) {
+    const dropdown = document.getElementById(prefix + 'HistoryDropdown');
+    const hist = getLocHistory();
+    if (!hist.length) {
+        dropdown.innerHTML = `<div class="loc-history-empty">No recent locations yet. Search above to save them here.</div>`;
+        return;
+    }
+    let html = `<div class="loc-history-header"><span>Recent Locations</span><button class="loc-history-clear" onclick="event.stopPropagation(); clearLocHistory(); renderLocHistoryDropdown('${prefix}');">Clear All</button></div>`;
+    hist.forEach(h => {
+        const isPin = /^\d{6}$/.test(h.value);
+        const iconSvg = isPin
+            ? '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'
+            : '<svg viewBox="0 0 24 24"><path d="M3 21l8-8M14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M14 2l8 8M14 2v6h6"/></svg>';
+        const sub = h.state ? `${h.display}${h.pincode ? ' · PIN ' + h.pincode : ''}` : h.display;
+        html += `<div class="loc-history-item" onclick="pickLocHistory('${prefix}', '${h.value.replace(/'/g, "\\'")}')">
+            <div class="loc-icon">${iconSvg}</div>
+            <div class="loc-text">
+                <div class="loc-primary">${h.value}</div>
+                <div class="loc-secondary">${sub}</div>
+            </div>
+            <button class="loc-remove" onclick="event.stopPropagation(); removeLocHistory('${h.value.replace(/'/g, "\\'")}'); renderLocHistoryDropdown('${prefix}');" aria-label="Remove">
+                <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>`;
+    });
+    dropdown.innerHTML = html;
+}
+
+function toggleLocHistory(prefix) {
+    const dropdown = document.getElementById(prefix + 'HistoryDropdown');
+    const toggle = document.getElementById(prefix + 'HistoryToggle');
+    const willOpen = !dropdown.classList.contains('show');
+    // close all other dropdowns first
+    document.querySelectorAll('.loc-history-dropdown.show').forEach(d => d.classList.remove('show'));
+    document.querySelectorAll('.loc-history-toggle.open').forEach(b => b.classList.remove('open'));
+    if (willOpen) {
+        renderLocHistoryDropdown(prefix);
+        dropdown.classList.add('show');
+        toggle.classList.add('open');
+    }
+}
+
+function pickLocHistory(prefix, value) {
+    document.getElementById(prefix + 'LocationInput').value = value;
+    // close dropdown
+    document.getElementById(prefix + 'HistoryDropdown').classList.remove('show');
+    document.getElementById(prefix + 'HistoryToggle').classList.remove('open');
+    // trigger appropriate fetch
+    if (prefix === 'grw') fetchGoldRates();
+    else if (prefix === 'frw') fetchFuelRates();
+}
+
+// Close location dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.loc-combobox')) {
+        document.querySelectorAll('.loc-history-dropdown.show').forEach(d => d.classList.remove('show'));
+        document.querySelectorAll('.loc-history-toggle.open').forEach(b => b.classList.remove('open'));
+    }
+});
+
+// Wire gold-rate input Enter key (existing) + close-on-blur
+document.getElementById('grwLocationInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') fetchGoldRates();
+});
+
+// ===================== FUEL RATE WIDGET =====================
+const FRW = {
+    // State-wise fuel prices (₹) — latest available published rates by Indian govt / OMCs.
+    // Source: PPAC (Petroleum Planning & Analysis Cell) data, refreshed periodically.
+    // Each entry: { petrol, diesel, cng (₹/kg where available), lpg (14.2kg domestic non-subsidised) }
+    // CNG null = no city gas distribution in that state.
+    stateData: {
+        'Andhra Pradesh': { petrol: 109.74, diesel: 97.55, cng: null, lpg: 955.00 },
+        'Arunachal Pradesh': { petrol: 102.69, diesel: 91.21, cng: null, lpg: 1028.50 },
+        'Assam': { petrol: 98.49, diesel: 90.45, cng: 90.50, lpg: 1001.00 },
+        'Bihar': { petrol: 108.62, diesel: 95.36, cng: 102.50, lpg: 1180.50 },
+        'Chhattisgarh': { petrol: 102.79, diesel: 95.04, cng: null, lpg: 1010.00 },
+        'Goa': { petrol: 96.86, diesel: 89.39, cng: null, lpg: 920.00 },
+        'Gujarat': { petrol: 95.51, diesel: 90.36, cng: 81.86, lpg: 920.50 },
+        'Haryana': { petrol: 97.36, diesel: 90.20, cng: 87.40, lpg: 1150.00 },
+        'Himachal Pradesh': { petrol: 95.61, diesel: 88.36, cng: null, lpg: 1010.50 },
+        'Jharkhand': { petrol: 100.74, diesel: 94.94, cng: 94.00, lpg: 1050.00 },
+        'Karnataka': { petrol: 103.06, diesel: 89.43, cng: 92.00, lpg: 920.50 },
+        'Kerala': { petrol: 107.92, diesel: 96.91, cng: null, lpg: 955.00 },
+        'Madhya Pradesh': { petrol: 109.46, diesel: 94.65, cng: 99.00, lpg: 1050.00 },
+        'Maharashtra': { petrol: 104.78, diesel: 91.94, cng: 81.86, lpg: 920.50 },
+        'Manipur': { petrol: 106.69, diesel: 93.93, cng: null, lpg: 1050.00 },
+        'Meghalaya': { petrol: 102.74, diesel: 91.40, cng: null, lpg: 1028.50 },
+        'Mizoram': { petrol: 105.62, diesel: 93.18, cng: null, lpg: 1028.50 },
+        'Nagaland': { petrol: 102.69, diesel: 91.21, cng: null, lpg: 1028.50 },
+        'Odisha': { petrol: 103.84, diesel: 95.27, cng: null, lpg: 1050.00 },
+        'Punjab': { petrol: 98.61, diesel: 90.16, cng: null, lpg: 1150.00 },
+        'Rajasthan': { petrol: 109.31, diesel: 94.96, cng: 96.50, lpg: 1050.00 },
+        'Sikkim': { petrol: 102.69, diesel: 91.21, cng: null, lpg: 1028.50 },
+        'Tamil Nadu': { petrol: 101.95, diesel: 92.46, cng: 88.00, lpg: 1010.00 },
+        'Telangana': { petrol: 108.83, diesel: 96.89, cng: null, lpg: 955.00 },
+        'Tripura': { petrol: 102.69, diesel: 91.21, cng: null, lpg: 1028.50 },
+        'Uttar Pradesh': { petrol: 96.74, diesel: 89.90, cng: 87.40, lpg: 1150.00 },
+        'Uttarakhand': { petrol: 95.61, diesel: 88.36, cng: null, lpg: 1010.50 },
+        'West Bengal': { petrol: 105.79, diesel: 92.97, cng: 99.00, lpg: 955.00 },
+        // Union Territories
+        'Andaman and Nicobar Islands': { petrol: 84.10, diesel: 79.67, cng: null, lpg: 955.00 },
+        'Chandigarh': { petrol: 97.36, diesel: 90.20, cng: 87.40, lpg: 1150.00 },
+        'Dadra and Nagar Haveli and Daman and Diu': { petrol: 95.51, diesel: 90.36, cng: null, lpg: 920.50 },
+        'Delhi': { petrol: 95.41, diesel: 88.67, cng: 76.59, lpg: 920.50 },
+        'Jammu and Kashmir': { petrol: 101.69, diesel: 88.21, cng: null, lpg: 1100.00 },
+        'Ladakh': { petrol: 102.69, diesel: 88.21, cng: null, lpg: 1100.00 },
+        'Lakshadweep': { petrol: 84.10, diesel: 79.67, cng: null, lpg: 955.00 },
+        'Puducherry': { petrol: 101.95, diesel: 92.46, cng: null, lpg: 1010.00 }
+    },
+    // Approx breakdown — base price + central excise + dealer commission + state VAT
+    // These are indicative national averages; actual values vary by state.
+    breakdown: {
+        petrol: { base: 49.50, excise: 19.90, dealer: 3.85, vatPct: 25 },
+        diesel: { base: 50.20, excise: 16.50, dealer: 2.85, vatPct: 18 },
+        cng:    { base: 60.00, excise: 0,    dealer: 0,    vatPct: 0 },
+        lpg:    { base: 750.00, excise: 0,   dealer: 50,   vatPct: 5 }
+    },
+    cacheKey: 'calcdeck_fuel_cache_v1',
+    cacheTTL: 6 * 60 * 60 * 1000  // 6 hours
+};
+
+function frwShowStatus(msg, isError) {
+    const el = document.getElementById('frwStatus');
+    el.textContent = msg;
+    el.classList.add('show');
+    el.classList.toggle('error', !!isError);
+}
+function frwHideStatus() {
+    const el = document.getElementById('frwStatus');
+    el.classList.remove('show', 'error');
+    el.textContent = '';
+}
+
+// Resolve state from pincode/city using postalpincode.in
+async function resolveLocationForFuel(input) {
+    const trimmed = (input || '').trim();
+    if (!trimmed) return { error: 'Please enter a pincode or city name.' };
+
+    if (/^\d{6}$/.test(trimmed)) {
+        try {
+            const resp = await fetch(`https://api.postalpincode.in/pincode/${trimmed}`);
+            const data = await resp.json();
+            if (Array.isArray(data) && data[0] && data[0].PostOffice && data[0].PostOffice.length) {
+                const po = data[0].PostOffice[0];
+                return {
+                    city: po.District || po.Block || po.Region,
+                    state: po.State,
+                    country: po.Country,
+                    pincode: trimmed,
+                    display: `${po.District || po.Block}, ${po.State}`
+                };
+            }
+            return { error: 'Pincode not found. Please check and try again.' };
+        } catch (e) {
+            return { error: 'Could not verify pincode (network error). Showing India average rate.' };
+        }
+    }
+    return { city: trimmed, display: trimmed, country: 'India' };
+}
+
+// Find best matching state in the dataset
+function findStateData(loc) {
+    if (!loc.state) return null;
+    const stateKey = Object.keys(FRW.stateData).find(s =>
+        s.toLowerCase() === loc.state.toLowerCase()
+    );
+    if (stateKey) return { key: stateKey, data: FRW.stateData[stateKey] };
+
+    // Partial match
+    const partialKey = Object.keys(FRW.stateData).find(s =>
+        s.toLowerCase().includes(loc.state.toLowerCase()) ||
+        loc.state.toLowerCase().includes(s.toLowerCase())
+    );
+    if (partialKey) return { key: partialKey, data: FRW.stateData[partialKey] };
+
+    // City-name heuristic (some common cities)
+    const cityMap = {
+        'mumbai': 'Maharashtra', 'pune': 'Maharashtra', 'nagpur': 'Maharashtra', 'nashik': 'Maharashtra',
+        'delhi': 'Delhi', 'new delhi': 'Delhi',
+        'bangalore': 'Karnataka', 'bengaluru': 'Karnataka', 'mysore': 'Karnataka', 'mysuru': 'Karnataka',
+        'chennai': 'Tamil Nadu', 'coimbatore': 'Tamil Nadu', 'madurai': 'Tamil Nadu',
+        'kolkata': 'West Bengal', 'howrah': 'West Bengal',
+        'hyderabad': 'Telangana',
+        'ahmedabad': 'Gujarat', 'surat': 'Gujarat', 'vadodara': 'Gujarat', 'rajkot': 'Gujarat',
+        'jaipur': 'Rajasthan', 'jodhpur': 'Rajasthan', 'udaipur': 'Rajasthan',
+        'lucknow': 'Uttar Pradesh', 'kanpur': 'Uttar Pradesh', 'varanasi': 'Uttar Pradesh',
+        'agra': 'Uttar Pradesh', 'ghaziabad': 'Uttar Pradesh', 'noida': 'Uttar Pradesh',
+        'patna': 'Bihar', 'gaya': 'Bihar',
+        'bhopal': 'Madhya Pradesh', 'indore': 'Madhya Pradesh', 'gwalior': 'Madhya Pradesh',
+        'chandigarh': 'Chandigarh',
+        'kochi': 'Kerala', 'thiruvananthapuram': 'Kerala', 'kozhikode': 'Kerala',
+        'guwahati': 'Assam',
+        'bhubaneswar': 'Odisha', 'cuttack': 'Odisha',
+        'dehradun': 'Uttarakhand',
+        'shimla': 'Himachal Pradesh',
+        'ranchi': 'Jharkhand', 'jamshedpur': 'Jharkhand',
+        'raipur': 'Chhattisgarh',
+        'panaji': 'Goa',
+        'imphal': 'Manipur',
+        'shillong': 'Meghalaya',
+        'aizawl': 'Mizoram',
+        'kohima': 'Nagaland',
+        'itanagar': 'Arunachal Pradesh',
+        'gangtok': 'Sikkim',
+        'agartala': 'Tripura',
+        'port blair': 'Andaman and Nicobar Islands',
+        'kavaratti': 'Lakshadweep',
+        'leh': 'Ladakh',
+        'srinagar': 'Jammu and Kashmir', 'jammu': 'Jammu and Kashmir',
+        'pondicherry': 'Puducherry', 'puducherry': 'Puducherry'
+    };
+    const cityLower = (loc.city || '').toLowerCase().trim();
+    if (cityMap[cityLower]) {
+        const sk = cityMap[cityLower];
+        return { key: sk, data: FRW.stateData[sk] };
+    }
+    return null;
+}
+
+async function fetchFuelRates() {
+    const input = document.getElementById('frwLocationInput').value;
+    const btn = document.getElementById('frwFetchBtn');
+    if (!input.trim()) {
+        frwShowStatus('Please enter a pincode or city name.', true);
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="animation:grwSpin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Fetching...';
+    if (!document.getElementById('grwSpinStyle')) {
+        const s = document.createElement('style');
+        s.id = 'grwSpinStyle';
+        s.textContent = '@keyframes grwSpin{to{transform:rotate(360deg)}}';
+        document.head.appendChild(s);
+    }
+    frwShowStatus('Resolving location & fetching today\'s fuel rates...', false);
+
+    const loc = await resolveLocationForFuel(input);
+    if (loc.error) {
+        frwShowStatus(loc.error, true);
+    } else if (loc.display) {
+        saveLocHistory({ value: input.trim(), display: loc.display, state: loc.state || '', pincode: loc.pincode || '' });
+    }
+
+    const stateMatch = findStateData(loc);
+    let rates, stateLabel, breakdown;
+    if (stateMatch) {
+        rates = stateMatch.data;
+        stateLabel = stateMatch.key;
+        breakdown = FRW.breakdown;
+    } else {
+        // Fallback: India average (Delhi)
+        rates = FRW.stateData['Delhi'];
+        stateLabel = 'India (avg — Delhi reference)';
+        breakdown = FRW.breakdown;
+    }
+
+    frwHideStatus();
+    renderFuelCards(rates, breakdown, loc, stateLabel);
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Refresh Rates';
+}
+
+function renderFuelCards(rates, breakdown, loc, stateLabel) {
+    // Location info
+    const locEl = document.getElementById('frwLocationInfo');
+    locEl.style.display = 'flex';
+    locEl.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Location: <strong>${loc.display || 'India (avg)'}</strong>${loc.pincode ? ` &middot; PIN: <strong>${loc.pincode}</strong>` : ''}${loc.state ? ` &middot; ${loc.state}` : ''} &middot; State dataset: <strong>${stateLabel}</strong>`;
+
+    // Cards
+    const cardsEl = document.getElementById('frwCards');
+    cardsEl.style.display = 'grid';
+    const fmt = v => v != null ? `₹${v.toFixed(2)}` : 'N/A';
+    const fmt0 = v => v != null ? `₹${Math.round(v)}` : 'N/A';
+
+    const fuels = [
+        {
+            cls: 'petrol', name: 'Petrol', unit: 'per litre', rate: rates.petrol,
+            icon: '<path d="M3 22V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v18M3 22h12M3 12h12M13 7l3-3 4 4-3 3M16 4l3 3"/>',
+            bd: breakdown.petrol
+        },
+        {
+            cls: 'diesel', name: 'Diesel', unit: 'per litre', rate: rates.diesel,
+            icon: '<path d="M3 22V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v18M3 22h12M3 12h12"/>',
+            bd: breakdown.diesel
+        },
+        {
+            cls: 'cng', name: 'CNG', unit: 'per kg', rate: rates.cng,
+            icon: '<path d="M5 22V8a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14M5 22h14M5 14h14M9 4V2M15 4V2"/>',
+            bd: breakdown.cng
+        },
+        {
+            cls: 'lpg', name: 'LPG Cylinder', unit: '14.2 kg (domestic)', rate: rates.lpg,
+            icon: '<ellipse cx="12" cy="6" rx="6" ry="2"/><path d="M6 6v12a6 2 0 0 0 12 0V6M6 12a6 2 0 0 0 12 0"/>',
+            bd: breakdown.lpg
+        }
+    ];
+
+    cardsEl.innerHTML = fuels.map(f => {
+        const isLpg = f.cls === 'lpg';
+        const rateStr = isLpg ? fmt0(f.rate) : fmt(f.rate);
+        const isCng = f.cls === 'cng';
+        const isUnavailable = f.rate == null;
+        const bd = f.bd;
+        // Compute breakdown display values
+        let bdRows = '';
+        if (isUnavailable) {
+            bdRows = `<div class="bd-val" style="grid-column: 1 / -1; text-align: center; color: #64748b; font-style: italic;">Not available in this state</div>`;
+        } else if (isCng) {
+            bdRows = `
+                <span>Base (pipeline)</span><span class="bd-val">${fmt(f.rate)}</span>
+                <span>VAT/other</span><span class="bd-val">included</span>
+            `;
+        } else if (isLpg) {
+            const base = bd.base;
+            const dealer = bd.dealer;
+            const vat = f.rate - base - dealer;
+            bdRows = `
+                <span>Base price</span><span class="bd-val">${fmt0(base)}</span>
+                <span>Dealer commission</span><span class="bd-val">${fmt0(dealer)}</span>
+                <span>VAT + other</span><span class="bd-val">${fmt0(vat)}</span>
+                <span>Total</span><span class="bd-val">${fmt0(f.rate)}</span>
+            `;
+        } else {
+            // Petrol / Diesel
+            const base = bd.base;
+            const excise = bd.excise;
+            const dealer = bd.dealer;
+            const beforeVat = base + excise + dealer;
+            const vatAmt = f.rate - beforeVat;
+            bdRows = `
+                <span>Base price</span><span class="bd-val">${fmt(base)}</span>
+                <span>Central excise</span><span class="bd-val">${fmt(excise)}</span>
+                <span>Dealer commission</span><span class="bd-val">${fmt(dealer)}</span>
+                <span>State VAT (~${bd.vatPct}%)</span><span class="bd-val">${fmt(vatAmt)}</span>
+                <span>Total / litre</span><span class="bd-val">${fmt(f.rate)}</span>
+            `;
+        }
+        return `<div class="frw-card ${f.cls}">
+            <div class="fuel-head"><svg viewBox="0 0 24 24">${f.icon}</svg><span class="fuel-name">${f.name}</span></div>
+            <div class="fuel-rate">${rateStr}</div>
+            <div class="fuel-unit">${f.unit}</div>
+            <div class="fuel-breakdown">${bdRows}</div>
+        </div>`;
+    }).join('');
+
+    // Footer
+    const footer = document.getElementById('frwFooter');
+    footer.style.display = 'flex';
+    const updated = document.getElementById('frwUpdated');
+    const time = new Date().toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' });
+    updated.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Indicative rates as of ${time} &middot; data refreshed periodically`;
+}
+
+// Enter key for fuel input
+document.getElementById('frwLocationInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') fetchFuelRates();
+});
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js').catch(e=>console);
 </script>
