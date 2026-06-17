@@ -714,109 +714,6 @@ body.light-mode .gst-manual-input-wrapper input { background: #f1f5f9; color: #0
 body.light-mode .add-to-comparison-btn svg { stroke: currentColor; }
 body.light-mode .total, body.light-mode .pg-total, body.light-mode .discount-saved { color: #0284c7; }
 
-/* TOOLTIP STYLES */
-.tooltip-wrapper {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-}
-.tooltip-icon {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: rgba(56, 189, 248, 0.2);
-    border: 1.5px solid #38bdf8;
-    color: #38bdf8;
-    font-size: 11px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: help;
-    margin-left: 6px;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-.tooltip-icon:hover {
-    background: #38bdf8;
-    color: #0f172a;
-    transform: scale(1.1);
-}
-#tooltip-portal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 0; height: 0;
-    z-index: 999999;
-    pointer-events: none;
-}
-.tooltip-box {
-    position: fixed;
-    background: #1a2744;
-    border: 2px solid #38bdf8;
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #f1f5f9;
-    white-space: normal;
-    width: 230px;
-    text-align: left;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.85), 0 0 0 1px rgba(56,189,248,0.15);
-    transform: translateY(4px);
-}
-.tooltip-box.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-.tooltip-box::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 6px solid transparent;
-    border-bottom-color: #38bdf8;
-}
-.tooltip-box::after {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 4px solid transparent;
-    border-bottom-color: #1a2744;
-    margin-bottom: -1px;
-}
-body.light-mode .tooltip-icon {
-    background: rgba(2, 132, 199, 0.15);
-    border-color: #0284c7;
-    color: #0284c7;
-}
-body.light-mode .tooltip-icon:hover {
-    background: #0284c7;
-    color: white;
-}
-body.light-mode .tooltip-box,
-.tooltip-box.light-mode {
-    background: #ffffff;
-    border-color: #0284c7;
-    color: #0f172a;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-}
-body.light-mode .tooltip-box::before,
-.tooltip-box.light-mode::before {
-    border-bottom-color: #0284c7;
-}
-body.light-mode .tooltip-box::after,
-.tooltip-box.light-mode::after {
-    border-bottom-color: #ffffff;
-}
-
 /* COMPARISON TOOL STYLES */
 .comparison-btn.has-items {
     background: rgba(56, 189, 248, 0.25);
@@ -1815,6 +1712,9 @@ body.light-mode .fuel-rate-widget .frw-disclaimer { color: #64748b; }
     top: calc(100% + 6px);
     left: 0;
     right: 0;
+    min-width: 0;            /* allow shrinking to parent */
+    max-width: 100%;         /* never exceed parent */
+    box-sizing: border-box;
     background: #0f172a;
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 1.2rem;
@@ -1824,6 +1724,7 @@ body.light-mode .fuel-rate-widget .frw-disclaimer { color: #64748b; }
     display: none;
     flex-direction: column;
     max-height: 420px;
+    /* When opened, JS may switch to position: fixed + clamped width to prevent viewport overflow */
 }
 .fancy-menu.show { display: flex; animation: fancyMenuIn 0.18s ease; }
 /* Smart-positioned — opens upward when not enough space below */
@@ -2331,16 +2232,16 @@ body.light-mode .metal-btn.active { background: linear-gradient(135deg, rgba(2,1
 .fancy-swatch[data-tier="mc-pergram"]  { background: linear-gradient(135deg, #fbbf24, #d97706); }
 .fancy-swatch[data-tier="mc-fixed"]    { background: linear-gradient(135deg, #f472b6, #be185d); }
 
-/* Making-charges row — stacked vertically on mobile, side-by-side on desktop */
+/* Making-charges row — dropdown + value input ALWAYS side-by-side */
 .making-charges-row {
     display: flex;
     gap: 8px;
     align-items: stretch;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* never wrap to next line */
 }
-.making-charges-row > div { flex: 1; min-width: 120px; }
-.making-charges-row .fancy-selector { min-width: 200px; }
-.making-charges-row .mc-value-col { display: flex; flex-direction: column; }
+.making-charges-row > div { min-width: 0; } /* allow shrinkage, prevent overflow */
+.making-charges-row .fancy-selector { flex: 1 1 60%; min-width: 0; }
+.making-charges-row .mc-value-col { flex: 1 1 40%; min-width: 0; display: flex; flex-direction: column; }
 .making-charges-row .mc-value-col label {
     font-size: 0.65rem;
     text-transform: uppercase;
@@ -2349,10 +2250,22 @@ body.light-mode .metal-btn.active { background: linear-gradient(135deg, rgba(2,1
     font-weight: 600;
     margin-bottom: 6px;
 }
-@media (max-width: 720px) {
-    .making-charges-row { flex-direction: column; }
-    .making-charges-row > div { min-width: 100%; }
+.making-charges-row .mc-value-col input { width: 100%; }
+/* On very narrow screens, still keep side-by-side but shrink */
+@media (max-width: 480px) {
+    .making-charges-row { gap: 6px; }
+    .making-charges-row .fancy-selector { flex: 1 1 55%; }
+    .making-charges-row .mc-value-col { flex: 1 1 45%; }
+    .making-charges-row .fancy-btn-label { font-size: 0.7rem; }
 }
+
+/* Prevent long menu text from forcing horizontal overflow */
+.fancy-option-title, .fancy-option-desc, .fancy-menu-footer, .fancy-btn-label {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    min-width: 0;
+}
+.fancy-option-body { min-width: 0; overflow: hidden; }
 
 /* Discount enhancements */
 .discount-stack-list {
@@ -3056,9 +2969,6 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
         top: 56px;
         max-height: calc(100vh - 80px);
     }
-
-    /* Tooltips — narrower on mobile */
-    .tooltip-box { max-width: 200px; font-size: 0.7rem; }
 }
 
 /* Very small phones (≤380px) — even tighter */
@@ -3080,18 +2990,18 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
     <div class="top-bar">
         <div class="brand-mini"><span class="brand-dot"></span><span>CalcDeck · Suite</span></div>
         <div class="icon-group">
-            <button id="themeToggleBtn" class="icon-btn" aria-label="Theme" title="Toggle theme">
+            <button id="themeToggleBtn" class="icon-btn" aria-label="Theme">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
                 </svg>
             </button>
-            <button id="openCalculatorBtn" class="icon-btn" aria-label="Calculator" title="Mini calculator">
+            <button id="openCalculatorBtn" class="icon-btn" aria-label="Calculator">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><path d="M8 10h8"/><path d="M8 14h8"/><path d="M8 18h8"/></svg>
             </button>
-            <button id="openHistoryBtn" class="icon-btn" aria-label="History" title="Calculation history">
+            <button id="openHistoryBtn" class="icon-btn" aria-label="History">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
             </button>
-            <button id="openComparisonBtn" class="icon-btn" aria-label="Comparison" data-count="0" title="Saved comparisons">
+            <button id="openComparisonBtn" class="icon-btn" aria-label="Comparison" data-count="0">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6M15 18v-8M3 21h18"/></svg>
             </button>
         </div>
@@ -3158,7 +3068,7 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
     <div id="panel-gst" class="tab-panel active">
         <div class="two-columns">
             <div class="calc-col-left">
-                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg> Amount (₹)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Enter the base amount before GST. Example: For a ₹1000 product, enter 1000.</span></span></label><div class="amount-input-wrapper"><input type="number" id="amount" placeholder="Enter amount"><button id="clearAmountBtn" class="clear-input-btn">✕</button></div>
+                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg> Amount (₹)</label><div class="amount-input-wrapper"><input type="number" id="amount" placeholder="Enter amount"><button id="clearAmountBtn" class="clear-input-btn">✕</button></div>
                     <div class="preset-row">
                         <button class="preset-chip" onclick="setGstAmount(100)">₹100</button>
                         <button class="preset-chip" onclick="setGstAmount(500)">₹500</button>
@@ -3168,7 +3078,7 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
                         <button class="preset-chip" onclick="setGstAmount(50000)">₹50,000</button>
                     </div>
                 </div>
-                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M8 12h8M12 18h0"/></svg> GST Rate<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Select a preset GST rate or enter a custom percentage. Common rates: 5% (essentials), 12% (processed), 18% (standard), 28% (luxury).</span></span></label><div class="fancy-selector" id="gstSelector">
+                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M8 12h8M12 18h0"/></svg> GST Rate</label><div class="fancy-selector" id="gstSelector">
     <button type="button" class="fancy-btn" id="selectedGST" aria-expanded="false">
         <span class="fancy-swatch" data-tier="gst-18"></span>
         <span class="fancy-btn-label">18% GST · Standard</span>
@@ -3224,7 +3134,7 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
     <input type="hidden" id="gst" value="18">
 </div></div>
                 <div class="row">
-                    <label>Tax Type (for split view)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">CGST+SGST applies to intra-state sales (within same state). IGST applies to inter-state sales (across states).</span></span></label>
+                    <label>Tax Type (for split view)</label>
                     <div class="split-toggle">
                         <button class="split-btn active" data-split="intra" onclick="setGstSplit('intra')">CGST + SGST (Intra-state)</button>
                         <button class="split-btn" data-split="inter" onclick="setGstSplit('inter')">IGST (Inter-state)</button>
@@ -3261,8 +3171,8 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
                     <button class="metal-btn" data-metal="cloth" onclick="setPgMetal('cloth')"><span class="metal-symbol">▦</span><span>Cloth</span></button>
                     <button class="metal-btn" data-metal="other" onclick="setPgMetal('other')"><span class="metal-symbol">··</span><span>Other</span></button>
                 </div>
-                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><path d="M9 9h6v6H9z"/></svg> Total Price (₹)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box">Enter the total price of the item.</span></span></label><input type="number" id="pgPrice" placeholder="e.g. 250"></div>
-                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M4 12h16"/></svg> Weight / Quantity<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Enter the weight or quantity. The unit selector below lets you choose grams, kilograms, or pieces.</span></span></label><input type="number" id="pgWeight" placeholder="e.g. 500">
+                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><path d="M9 9h6v6H9z"/></svg> Total Price (₹)</label><input type="number" id="pgPrice" placeholder="e.g. 250"></div>
+                <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M4 12h16"/></svg> Weight / Quantity</label><input type="number" id="pgWeight" placeholder="e.g. 500">
                     <div class="preset-row">
                         <button class="preset-chip" onclick="setPgWeight(1)">1g</button>
                         <button class="preset-chip" onclick="setPgWeight(5)">5g</button>
@@ -3275,7 +3185,7 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
                         <button class="preset-chip" onclick="setPgWeight(46.65)">4 Tola (1 Bhori)</button>
                     </div>
                 </div>
-                <div class="row"><label>📏 Unit<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box">Select the unit of measurement for accurate per-unit calculation.</span></span></label><div class="fancy-selector" id="unitSelector">
+                <div class="row"><label>📏 Unit</label><div class="fancy-selector" id="unitSelector">
     <button type="button" class="fancy-btn" id="selectedUnit" aria-expanded="false">
         <span class="fancy-swatch" data-tier="unit-g"></span>
         <span class="fancy-btn-label">Gram (g) · Standard metric</span>
@@ -3326,7 +3236,7 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
     </div>
     <input type="hidden" id="pgUnit" value="g">
 </div></div>
-                <div class="row"><label>🔨 Making / Processing Charges<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Add making charges (jewellery), processing fees, packaging, or any surcharge. Applied either as % of base value, per-gram rate, or fixed total.</span></span></label>
+                <div class="row"><label>🔨 Making / Processing Charges</label>
                     <div class="making-charges-row">
                         <div class="fancy-selector" id="makingSelector">
                             <button type="button" class="fancy-btn" id="selectedMaking" aria-expanded="false">
@@ -3378,7 +3288,7 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
                         </div>
                     </div>
                 </div>
-                <div class="row"><label>🛒 Desired Quantity<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Enter how much quantity you want to buy. The calculator will show the final amount for this quantity based on the per-unit rate.</span></span></label><input type="number" id="pgDesiredQty" placeholder="e.g. 150" oninput="calcDesiredAmount()"></div>
+                <div class="row"><label>🛒 Desired Quantity</label><input type="number" id="pgDesiredQty" placeholder="e.g. 150" oninput="calcDesiredAmount()"></div>
                 <div class="action-btns"><button class="action add" onclick="calcPerGram()">Calculate</button><button class="action secondary" onclick="clearPGCalc()">Clear</button></div>
                 <button class="add-to-comparison-btn" id="addPGToComparison" onclick="addToComparison('pergram')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison</button></div>
             <div class="result">
@@ -3412,9 +3322,9 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
 
                 <!-- Single discount mode (original) -->
                 <div id="discountSingleMode">
-                    <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/></svg> Original Price (₹)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box">Enter the original price before discount.</span></span></label><input type="number" id="discountPrice" placeholder="0.00"></div>
-                    <div class="row"><label>Discount Type<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box multi-line">Choose between percentage discount (e.g., 20% off) or fixed amount discount (e.g., ₹100 off).</span></span></label><div class="discount-group"><button data-type="percent" class="discount-type-btn active">% Percentage</button><button data-type="fixed" class="discount-type-btn">₹ Fixed</button></div></div>
-                    <div class="row"><label id="discountValueLabel">Discount (%)<span class="tooltip-wrapper"><span class="tooltip-icon">?</span><span class="tooltip-box">Enter the discount percentage or fixed amount based on your selection.</span></span></label><input type="number" id="discountValue" placeholder="e.g. 15"></div>
+                    <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/></svg> Original Price (₹)</label><input type="number" id="discountPrice" placeholder="0.00"></div>
+                    <div class="row"><label>Discount Type</label><div class="discount-group"><button data-type="percent" class="discount-type-btn active">% Percentage</button><button data-type="fixed" class="discount-type-btn">₹ Fixed</button></div></div>
+                    <div class="row"><label id="discountValueLabel">Discount (%)</label><input type="number" id="discountValue" placeholder="e.g. 15"></div>
                 </div>
 
                 <!-- Stacked discounts mode -->
@@ -3754,7 +3664,21 @@ confirmClearModal?.addEventListener('click', () => { unifiedHistory = []; localS
 clearModal?.addEventListener('click', (e) => { if(e.target === clearModal) clearModal.classList.remove('show'); });
 
 // ---------- DROPDOWN CLOSE ----------
-function closeAllDropdowns() { document.getElementById('gstMenu')?.classList.remove('show'); document.getElementById('unitMenu')?.classList.remove('show'); document.querySelectorAll('.fancy-menu.show').forEach(m => m.classList.remove('show')); document.querySelectorAll('.fancy-btn[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false')); }
+function closeAllDropdowns() {
+    document.getElementById('gstMenu')?.classList.remove('show');
+    document.getElementById('unitMenu')?.classList.remove('show');
+    document.querySelectorAll('.fancy-menu.show').forEach(m => {
+        m.classList.remove('show', 'open-upward');
+        // Clear any inline position/size overrides from smart positioning
+        m.style.position = '';
+        m.style.left = '';
+        m.style.right = '';
+        m.style.top = '';
+        m.style.width = '';
+        m.style.maxWidth = '';
+    });
+    document.querySelectorAll('.fancy-btn[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
+}
 // (old close-on-outside handler replaced by fancy-dropdown handler above)
 // Fancy dropdown toggle handlers (GST + Unit)
 function toggleFancyMenu(menuId, btnId) {
@@ -3770,16 +3694,39 @@ function toggleFancyMenu(menuId, btnId) {
     if (willShow) {
         menu.classList.add('show');
         btn.setAttribute('aria-expanded', 'true');
-        // Smart positioning — if menu would overflow viewport bottom, open upward instead
+        // Smart positioning — handle BOTH vertical and horizontal viewport overflow
         const btnRect = btn.getBoundingClientRect();
         const menuRect = menu.getBoundingClientRect();
         const viewportH = window.innerHeight;
+        const viewportW = window.innerWidth;
         const spaceBelow = viewportH - btnRect.bottom;
         const spaceAbove = btnRect.top;
         const menuHeight = menuRect.height;
+        // Vertical: flip upward if not enough room below
         if (spaceBelow < menuHeight + 20 && spaceAbove > spaceBelow && spaceAbove > menuHeight + 20) {
             menu.classList.add('open-upward');
         }
+        // Horizontal: if the menu (sized to parent) would overflow the viewport,
+        // switch to position: fixed with a clamped width so it never spills outside.
+        requestAnimationFrame(() => {
+            const r = menu.getBoundingClientRect();
+            const pad = 8;
+            if (r.left < pad || r.right > viewportW - pad) {
+                const newWidth = Math.min(btnRect.width, viewportW - pad * 2);
+                const newLeft = Math.max(pad, Math.min(btnRect.left, viewportW - newWidth - pad));
+                let newTop = btnRect.bottom + 6;
+                // Re-flip upward if needed
+                if (newTop + menu.offsetHeight > viewportH - pad && btnRect.top > menu.offsetHeight + pad) {
+                    newTop = btnRect.top - menu.offsetHeight - 6;
+                }
+                menu.style.position = 'fixed';
+                menu.style.left = newLeft + 'px';
+                menu.style.right = 'auto';
+                menu.style.top = newTop + 'px';
+                menu.style.width = newWidth + 'px';
+                menu.style.maxWidth = (viewportW - pad * 2) + 'px';
+            }
+        });
         // Focus search input
         const search = menu.querySelector('input[type="text"]');
         if (search) { search.value = ''; setTimeout(() => search.focus(), 50); }
@@ -3800,14 +3747,22 @@ document.getElementById('selectedUnit')?.addEventListener('click', (e) => {
 // Close fancy menus on outside click
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.fancy-selector')) {
-        document.querySelectorAll('.fancy-menu.show').forEach(m => m.classList.remove('show'));
+        document.querySelectorAll('.fancy-menu.show').forEach(m => {
+            m.classList.remove('show', 'open-upward');
+            m.style.position = ''; m.style.left = ''; m.style.right = '';
+            m.style.top = ''; m.style.width = ''; m.style.maxWidth = '';
+        });
         document.querySelectorAll('.fancy-btn[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
     }
 });
 // Close fancy menus on Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        document.querySelectorAll('.fancy-menu.show').forEach(m => m.classList.remove('show'));
+        document.querySelectorAll('.fancy-menu.show').forEach(m => {
+            m.classList.remove('show', 'open-upward');
+            m.style.position = ''; m.style.left = ''; m.style.right = '';
+            m.style.top = ''; m.style.width = ''; m.style.maxWidth = '';
+        });
         document.querySelectorAll('.fancy-btn[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
     }
 });
@@ -4405,107 +4360,9 @@ switchTab('pergram'); renderHistory();
 document.getElementById('openHistoryBtn')?.addEventListener('click',(e)=>{ e.stopPropagation(); renderHistory(); document.getElementById('historyDialog')?.classList.toggle('show'); closeAllDropdowns(); miniDialog.classList.remove('show'); comparisonDialog?.classList.remove('show'); hideAllTooltips(); });
 document.addEventListener('click',(e)=>{ if(!document.getElementById('historyDialog')?.contains(e.target) && e.target !== document.getElementById('openHistoryBtn')) document.getElementById('historyDialog')?.classList.remove('show'); });
 
-// ---------- TOOLTIP PORTAL SYSTEM ----------
-const tooltipPortal = document.createElement('div');
-tooltipPortal.id = 'tooltip-portal';
-document.body.appendChild(tooltipPortal);
-let _activeTooltipBox = null;
-let _tooltipTimeout = null;
-
-// GLOBAL — called by other dialogs + ESC + closeAllDialogs
-window.hideAllTooltips = function() {
-    if (_tooltipTimeout) clearTimeout(_tooltipTimeout);
-    _tooltipTimeout = null;
-    tooltipPortal.innerHTML = '';
-    _activeTooltipBox = null;
-};
-
-function showTooltip(icon) {
-    hideAllTooltips();
-    const srcBox = icon.closest('.tooltip-wrapper').querySelector('.tooltip-box');
-    if (!srcBox) return;
-
-    const box = srcBox.cloneNode(true);
-    if (document.body.classList.contains('light-mode')) box.classList.add('light-mode');
-
-    // Append off-screen first so we can measure real dimensions
-    box.style.visibility = 'hidden';
-    box.style.opacity = '0';
-    box.style.top = '0px';
-    box.style.left = '0px';
-    tooltipPortal.appendChild(box);
-    _activeTooltipBox = box;
-
-    // Measure after paint
-    requestAnimationFrame(() => {
-        const iconRect = icon.getBoundingClientRect();
-        const boxW = box.offsetWidth;
-        const boxH = box.offsetHeight;
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const gap = 6;
-
-        // Horizontal: center on icon, clamp inside viewport with 8px padding
-        let left = iconRect.left + iconRect.width / 2 - boxW / 2;
-        if (left + boxW > vw - 8) left = vw - boxW - 8;
-        if (left < 8) left = 8;
-
-        // Vertical: prefer below icon, flip above if not enough room
-        let top;
-        const belowFits = iconRect.bottom + gap + boxH <= vh - 8;
-        if (belowFits) {
-            top = iconRect.bottom + window.scrollY + gap;
-        } else {
-            top = iconRect.top + window.scrollY - gap - boxH;
-        }
-
-        box.style.top = top + 'px';
-        box.style.left = left + 'px';
-
-        requestAnimationFrame(() => {
-            box.style.visibility = '';
-            box.style.opacity = '';
-            box.classList.add('visible');
-            
-            _tooltipTimeout = setTimeout(() => {
-                hideAllTooltips();
-            }, 4000);
-        });
-    });
-}
-
-function initTooltips() {
-    document.querySelectorAll('.tooltip-icon').forEach(icon => {
-        icon.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const isOpen = _activeTooltipBox && tooltipPortal.contains(_activeTooltipBox);
-            hideAllTooltips();
-            if (!isOpen) {
-                // close all other dialogs first
-                miniDialog?.classList.remove('show');
-                document.getElementById('historyDialog')?.classList.remove('show');
-                comparisonDialog?.classList.remove('show');
-                showTooltip(icon);
-            }
-        });
-    });
-
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.tooltip-wrapper')) hideAllTooltips();
-    });
-
-    // First-time auto-show
-    const hasSeenTooltips = localStorage.getItem('calcSuiteSeenTooltips');
-    if (!hasSeenTooltips) {
-        const firstIcon = document.querySelector('.tooltip-icon');
-        if (firstIcon) {
-            setTimeout(() => { showTooltip(firstIcon); setTimeout(hideAllTooltips, 3000); }, 800);
-        }
-        localStorage.setItem('calcSuiteSeenTooltips', 'true');
-    }
-}
-initTooltips();
+// ---------- TOOLTIP SYSTEM (removed) ----------
+// No-op stub kept so existing call-sites (closeAllDialogs, dialog open handlers, etc.) don't break.
+window.hideAllTooltips = function() {};
 
 // ---------- COMPARISON TOOL ----------
 let comparisonItems = JSON.parse(localStorage.getItem('calcSuiteComparison') || '[]');
@@ -4703,11 +4560,7 @@ window.addEventListener('popstate', (e) => {
         setTimeout(() => { if(anyDialogOpen()) pushDialogState(); }, 50);
     });
 });
-document.querySelectorAll('.tooltip-icon').forEach(icon => {
-    icon.addEventListener('click', () => {
-        setTimeout(() => { if(anyDialogOpen()) pushDialogState(); }, 50);
-    });
-});
+// (Tooltip-icon state-push listener removed along with tooltip system)
 
 // ===================== LIVE GOLD RATE WIDGET =====================
 const GRW = {
@@ -5502,16 +5355,35 @@ window.toggleCoalMenu = (e) => {
         document.getElementById('gstMenu')?.classList.remove('show');
         document.getElementById('unitMenu')?.classList.remove('show');
         document.getElementById('makingMenu')?.classList.remove('show');
-        // Smart positioning — if menu would overflow viewport bottom, open upward
+        // Smart positioning — handle BOTH vertical and horizontal viewport overflow
         const btnRect = btn.getBoundingClientRect();
         const menuRect = menu.getBoundingClientRect();
         const viewportH = window.innerHeight;
+        const viewportW = window.innerWidth;
         const spaceBelow = viewportH - btnRect.bottom;
         const spaceAbove = btnRect.top;
         const menuHeight = menuRect.height;
         if (spaceBelow < menuHeight + 20 && spaceAbove > spaceBelow && spaceAbove > menuHeight + 20) {
             menu.classList.add('open-upward');
         }
+        requestAnimationFrame(() => {
+            const r = menu.getBoundingClientRect();
+            const pad = 8;
+            if (r.left < pad || r.right > viewportW - pad) {
+                const newWidth = Math.min(btnRect.width, viewportW - pad * 2);
+                const newLeft = Math.max(pad, Math.min(btnRect.left, viewportW - newWidth - pad));
+                let newTop = btnRect.bottom + 6;
+                if (newTop + menu.offsetHeight > viewportH - pad && btnRect.top > menu.offsetHeight + pad) {
+                    newTop = btnRect.top - menu.offsetHeight - 6;
+                }
+                menu.style.position = 'fixed';
+                menu.style.left = newLeft + 'px';
+                menu.style.right = 'auto';
+                menu.style.top = newTop + 'px';
+                menu.style.width = newWidth + 'px';
+                menu.style.maxWidth = (viewportW - pad * 2) + 'px';
+            }
+        });
         document.getElementById('coalMenuSearch').value = '';
         filterCoalMenu();
         setTimeout(() => document.getElementById('coalMenuSearch').focus(), 50);
