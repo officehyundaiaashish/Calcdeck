@@ -2187,39 +2187,6 @@ body.light-mode .gst-split-row .split-val { color: #0284c7; }
     justify-content: flex-end;
 }
 
-/* Making-charges fancy swatches */
-.fancy-swatch[data-tier="mc-none"]     { background: linear-gradient(135deg, #64748b, #475569); }
-.fancy-swatch[data-tier="mc-percent"]  { background: linear-gradient(135deg, #38bdf8, #0284c7); }
-.fancy-swatch[data-tier="mc-pergram"]  { background: linear-gradient(135deg, #fbbf24, #d97706); }
-.fancy-swatch[data-tier="mc-fixed"]    { background: linear-gradient(135deg, #f472b6, #be185d); }
-
-/* Making-charges row — dropdown + value input ALWAYS side-by-side */
-.making-charges-row {
-    display: flex;
-    gap: 8px;
-    align-items: stretch;
-    flex-wrap: nowrap; /* never wrap to next line */
-}
-.making-charges-row > div { min-width: 0; } /* allow shrinkage, prevent overflow */
-.making-charges-row .fancy-selector { flex: 1 1 60%; min-width: 0; }
-.making-charges-row .mc-value-col { flex: 1 1 40%; min-width: 0; display: flex; flex-direction: column; }
-.making-charges-row .mc-value-col label {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #94a3b8;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-.making-charges-row .mc-value-col input { width: 100%; }
-/* On very narrow screens, still keep side-by-side but shrink */
-@media (max-width: 480px) {
-    .making-charges-row { gap: 6px; }
-    .making-charges-row .fancy-selector { flex: 1 1 55%; }
-    .making-charges-row .mc-value-col { flex: 1 1 45%; }
-    .making-charges-row .fancy-btn-label { font-size: 0.7rem; }
-}
-
 /* Prevent long menu text from forcing horizontal overflow */
 .fancy-option-title, .fancy-option-desc, .fancy-menu-footer, .fancy-btn-label {
     overflow-wrap: anywhere;
@@ -3185,58 +3152,7 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
     </div>
     <input type="hidden" id="pgUnit" value="g">
 </div></div>
-                <div class="row"><label>🔨 Making / Processing Charges</label>
-                    <div class="making-charges-row">
-                        <div class="fancy-selector" id="makingSelector">
-                            <button type="button" class="fancy-btn" id="selectedMaking" aria-expanded="false">
-                                <span class="fancy-swatch" data-tier="mc-none"></span>
-                                <span class="fancy-btn-label">No making charges</span>
-                                <svg class="fancy-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                            </button>
-                            <div class="fancy-menu" id="makingMenu">
-                                <div class="fancy-menu-search">
-                                    <input type="text" id="makingMenuSearch" placeholder="Search charge types..." oninput="filterMakingMenu()">
-                                </div>
-                                <div class="fancy-menu-list" id="makingMenuList">
-                                    <div class="fancy-option active" data-value="none" data-tier="mc-none" data-search="none no charges off default" onclick="setMakingType('none')">
-                                        <span class="fancy-swatch" data-tier="mc-none"></span>
-                                        <div class="fancy-option-body">
-                                            <div class="fancy-option-title">None <span class="fancy-tag common">Default</span></div>
-                                            <div class="fancy-option-desc">No making charges applied — use raw material price only</div>
-                                        </div>
-                                    </div>
-                                    <div class="fancy-option" data-value="percent" data-tier="mc-percent" data-search="percent percentage base value jewellery gold common" onclick="setMakingType('percent')">
-                                        <span class="fancy-swatch" data-tier="mc-percent"></span>
-                                        <div class="fancy-option-body">
-                                            <div class="fancy-option-title">% of base value <span class="fancy-tag standard">Jewellery</span></div>
-                                            <div class="fancy-option-desc">Most common for jewellery — e.g. 12% means ₹120 making on ₹1000 base</div>
-                                        </div>
-                                    </div>
-                                    <div class="fancy-option" data-value="pergram" data-tier="mc-pergram" data-search="pergram per gram rate gold plain making" onclick="setMakingType('pergram')">
-                                        <span class="fancy-swatch" data-tier="mc-pergram"></span>
-                                        <div class="fancy-option-body">
-                                            <div class="fancy-option-title">₹ per gram <span class="fancy-tag common">Plain gold</span></div>
-                                            <div class="fancy-option-desc">Per-gram rate — e.g. ₹50/g making on 10g = ₹500 total</div>
-                                        </div>
-                                    </div>
-                                    <div class="fancy-option" data-value="fixed" data-tier="mc-fixed" data-search="fixed flat total surcharge packaging processing" onclick="setMakingType('fixed')">
-                                        <span class="fancy-swatch" data-tier="mc-fixed"></span>
-                                        <div class="fancy-option-body">
-                                            <div class="fancy-option-title">₹ fixed total <span class="fancy-tag luxury">Flat</span></div>
-                                            <div class="fancy-option-desc">Flat surcharge — e.g. ₹500 making + ₹200 packaging = ₹700 total</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="fancy-menu-footer">Choose how making charges are calculated · Applied to base value</div>
-                            </div>
-                            <input type="hidden" id="pgMakingType" value="none">
-                        </div>
-                        <div class="mc-value-col">
-                            <label>Value</label>
-                            <input type="number" id="pgMakingValue" placeholder="e.g. 12 (for %) or 50 (for ₹/g)" oninput="resetComparisonBtnState('pergram')">
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="row"><label>🛒 Desired Quantity</label><input type="number" id="pgDesiredQty" placeholder="e.g. 150" oninput="calcDesiredAmount()"></div>
                 <div class="action-btns"><button class="action add" onclick="calcPerGram()">Calculate</button><button class="action secondary" onclick="clearPGCalc()">Clear</button></div>
                 <button class="add-to-comparison-btn" id="addPGToComparison" onclick="addToComparison('pergram')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add to Comparison</button></div>
@@ -3797,42 +3713,6 @@ document.getElementById('manualGSTInput')?.addEventListener('input', function() 
         // De-activate preset options
         document.querySelectorAll('#gstMenuList .fancy-option').forEach(opt => opt.classList.remove('active'));
     }
-});
-// Making-charges fancy dropdown
-const MAKING_DESCRIPTIONS = {
-    'none': 'No making charges',
-    'percent': '% of base value',
-    'pergram': '₹ per gram',
-    'fixed': '₹ fixed total'
-};
-window.setMakingType = (v) => {
-    document.getElementById('pgMakingType').value = v;
-    const btn = document.getElementById('selectedMaking');
-    if (btn) {
-        const swatch = btn.querySelector('.fancy-swatch');
-        const label = btn.querySelector('.fancy-btn-label');
-        swatch.setAttribute('data-tier', 'mc-' + v);
-        label.innerText = MAKING_DESCRIPTIONS[v] || v;
-        btn.setAttribute('aria-expanded', 'false');
-        document.getElementById('makingMenu')?.classList.remove('show');
-        // Update active state
-        document.querySelectorAll('#makingMenuList .fancy-option').forEach(opt => {
-            opt.classList.toggle('active', opt.dataset.value === v);
-        });
-    }
-    resetComparisonBtnState && resetComparisonBtnState('pergram');
-};
-window.filterMakingMenu = () => {
-    const q = (document.getElementById('makingMenuSearch').value || '').toLowerCase().trim();
-    document.querySelectorAll('#makingMenuList .fancy-option').forEach(opt => {
-        const search = (opt.dataset.search || '') + ' ' + (opt.dataset.value || '').toLowerCase();
-        opt.style.display = !q || search.includes(q) ? 'flex' : 'none';
-    });
-};
-// Wire making-charges dropdown toggle
-document.getElementById('selectedMaking')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleFancyMenu('makingMenu', 'selectedMaking');
 });
 
 window.filterUnitMenu = () => {
