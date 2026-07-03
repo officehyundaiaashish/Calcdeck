@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>CalcDeck | PerGram + GST + Discount + Live Rates</title>
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f172a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CalcDeck">
 <meta name="description" content="All-in-one toolkit: GST, Per Gram pricing, Discount calculator — PWA ready.">
+<!-- Inline PWA Manifest for single-file deployment -->
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22CalcDeck%22,%22short_name%22:%22CalcDeck%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%230f172a%22,%22theme_color%22:%22%2338bdf8%22,%22icons%22:[{%22src%22:%22https://via.placeholder.com/192x192/0f172a/38bdf8?text=CD%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22},{%22src%22:%22https://via.placeholder.com/512x512/0f172a/38bdf8?text=CD%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}">
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 <style>
 * {
@@ -4447,7 +4448,48 @@ window.addEventListener('popstate', (e) => {
         setTimeout(() => { if(anyDialogOpen()) pushDialogState(); }, 50);
     });
 });
-// (Tooltip-icon state-push listener removed along with tooltip system)
+
+// ===================== INLINE PWA (self-contained) =====================
+let deferredPrompt;
+const installBtn = document.createElement('button');
+installBtn.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#38bdf8;color:#0f172a;padding:12px 20px;border:none;border-radius:999px;font-weight:700;z-index:9999;box-shadow:0 10px 30px -10px rgba(56,189,248,0.6);display:none;';
+installBtn.innerHTML = 'Install CalcDeck';
+document.body.appendChild(installBtn);
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'block';
+});
+installBtn.addEventListener('click', () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => { installBtn.style.display = 'none'; });
+    }
+});
+
+// Inline Service Worker for instant updates (caches HTML + auto-reloads on new version)
+if ('serviceWorker' in navigator) {
+    const swCode = `
+self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
+self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+self.addEventListener('fetch', e => {
+    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+});
+    `;
+    const blob = new Blob([swCode], {type: 'text/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).then(reg => {
+        reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    if (confirm('New version available. Reload to update?')) window.location.reload();
+                }
+            });
+        });
+    }).catch(console.error);
+}
 
 // ===================== LIVE GOLD RATE WIDGET =====================
 const GRW = {
