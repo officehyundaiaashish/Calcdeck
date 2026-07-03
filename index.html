@@ -320,30 +320,64 @@ input:focus {
     background: rgba(255, 255, 255, 0.12);
     box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
 }
-/* Suppress browser autofill, Google Password Manager, Google Pay & payment-manager detection on ALL inputs globally */
+/* ========== GLOBAL ANTI-AUTOFILL + ANTI-PASSWORD-MANAGER + ANTI-PAYMENT-MANAGER (phones) ========== */
+/* 1) Suppress the yellow/blue background that browsers/Google PM paint on autofilled fields. */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active,
 input:-internal-autofill-selected,
-input:-internal-autofill-previewed {
+input:-internal-autofill-previewed,
+input:-webkit-autofill-strong-password,
+input:-webkit-autofill-strong-password-viewable {
     -webkit-box-shadow: 0 0 0 1000px rgba(15, 22, 41, 0.07) inset !important;
     -webkit-text-fill-color: #f8fafc !important;
     caret-color: #f8fafc !important;
     background-color: rgba(255, 255, 255, 0.07) !important;
+    background-image: none !important;
     transition: background-color 5000s ease-in-out 0s !important;
     animation: none !important;
+    filter: none !important;
 }
 body.light-mode input:-webkit-autofill,
 body.light-mode input:-webkit-autofill:hover,
 body.light-mode input:-webkit-autofill:focus,
 body.light-mode input:-webkit-autofill:active,
 body.light-mode input:-internal-autofill-selected,
-body.light-mode input:-internal-autofill-previewed {
+body.light-mode input:-internal-autofill-previewed,
+body.light-mode input:-webkit-autofill-strong-password,
+body.light-mode input:-webkit-autofill-strong-password-viewable {
     -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.85) inset !important;
     -webkit-text-fill-color: #0f172a !important;
     caret-color: #0f172a !important;
     background-color: rgba(0, 0, 0, 0.04) !important;
+    background-image: none !important;
+}
+/* 2) Visually distinguish initial readonly (locked) state from active state.
+   Google PM / Google Pay / LastPass / 1Password / Bitwarden ALL skip readonly fields on first paint. */
+input[readonly],
+input[readonly]:focus,
+input[readonly]:hover,
+textarea[readonly],
+select[readonly] {
+    background: rgba(255, 255, 255, 0.045) !important;
+    color: #f8fafc !important;
+    cursor: pointer !important;
+    caret-color: transparent !important;
+    box-shadow: none !important;
+    opacity: 0.92;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+    pointer-events: auto !important;
+}
+body.light-mode input[readonly],
+body.light-mode input[readonly]:focus,
+body.light-mode input[readonly]:hover,
+body.light-mode textarea[readonly],
+body.light-mode select[readonly] {
+    background: rgba(0, 0, 0, 0.025) !important;
+    color: #0f172a !important;
 }
 .amount-input-wrapper {
     position: relative;
@@ -5988,40 +6022,90 @@ if (document.readyState === 'loading') {
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js').catch(e=>console);
 
-// ---------- DISABLE GOOGLE PASSWORD MANAGER, PAYMENT MANAGER & AUTOFILL GLOBALLY ----------
-// Aggressively prevent Google Password Manager, Google Pay, and any payment/autofill manager
-// from triggering on any input field across the app (phone-safe).
+// ---------- DISABLE GOOGLE PASSWORD MANAGER, GOOGLE PAY & ALL AUTOFILL GLOBALLY (phones) ----------
+// Three-layer defense that together reliably kills Google Password Manager + Google Pay popups:
+//   (a) autocomplete="new-password" — the strongest signal; PMs treat this as "do not autofill"
+//   (b) Initial readonly — PMs and autofill engines skip readonly fields on initial paint
+//       (the readonly is removed the moment the user genuinely taps/types into the field)
+//   (c) Per-manager ignore data-attributes — covers 1Password, LastPass, Bitwarden, Dashlane, Proton Pass
 function disableGlobalAutofill() {
     const allInputs = document.querySelectorAll('input, select, textarea');
     allInputs.forEach(el => {
-        // Core browser-level suppression
-        el.setAttribute('autocomplete', 'off');
+        if (el.dataset && el.dataset.autofillLocked === '1') return; // already processed
+        if (el.dataset) el.dataset.autofillLocked = '1';
+
+        // (a) Strongest browser/PM-level signal
+        el.setAttribute('autocomplete', 'new-password');
         el.setAttribute('data-form-type', 'other');
-        // Third-party password-manager suppression signals
-        el.setAttribute('data-lpignore', 'true');
+        el.setAttribute('data-bitwarden-watching', 'false');
         el.setAttribute('data-1p-ignore', 'true');
+        el.setAttribute('data-lpignore', 'true');
         el.setAttribute('data-bwignore', '');
-        el.setAttribute('data-protonpass-ignore', 'true');
         el.setAttribute('data-dashlane-ignore', 'true');
-        // Text-related suppression only on text-entry elements
+        el.setAttribute('data-protonpass-ignore', 'true');
+        el.setAttribute('data-enpass-ignore', 'true');
+        el.setAttribute('data-keeper-ignore', 'true');
+        el.setAttribute('data-roboform-ignore', 'true');
+        el.setAttribute('data-nordpass-ignore', 'true');
+
+        // For non-text widgets, also block payment-related autocomplete tokens.
+        if (el.tagName !== 'TEXTAREA') {
+            // Re-affirm that no payment/identity autofill can ever bind to this field.
+            el.setAttribute('autocomplete', 'new-password'); // (re-set in case browser overrode)
+        }
+
+        // (b) Start readonly so PMs/payment-managers skip the field on initial page render.
+        //     Unlock the moment the user genuinely interacts (pointerdown / touchstart / keydown / beforeinput).
+        try {
+            el.setAttribute('readonly', 'readonly');
+            const unlock = () => {
+                el.removeAttribute('readonly');
+                el.removeEventListener('pointerdown', unlock, true);
+                el.removeEventListener('touchstart', unlock, true);
+                el.removeEventListener('keydown', unlock, true);
+                el.removeEventListener('beforeinput', unlock, true);
+            };
+            el.addEventListener('pointerdown', unlock, true);
+            el.addEventListener('touchstart', unlock, true);
+            el.addEventListener('keydown', unlock, true);
+            el.addEventListener('beforeinput', unlock, true);
+        } catch (e) { /* readonly may be unsupported on some input types — that's fine */ }
+
+        // (c) Suppress text-correction suggestions on phones
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
             el.setAttribute('autocorrect', 'off');
             el.setAttribute('autocapitalize', 'off');
             el.setAttribute('spellcheck', 'false');
         }
+
+        // (d) For number inputs, force numeric inputmode to keep Google Pay from suggesting cards
+        if (el.tagName === 'INPUT' && (el.type === 'number' || el.type === 'text')) {
+            // do not set type here (would break JS), just reinforce inputmode
+            if (!el.getAttribute('inputmode')) {
+                el.setAttribute('inputmode', el.type === 'number' ? 'decimal' : 'text');
+            }
+        }
     });
 }
 
-// Run on initial load
+// Initial pass
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', disableGlobalAutofill);
 } else {
     disableGlobalAutofill();
 }
 
-// Watch for dynamically added inputs (e.g., discount stack rows, history items)
-const autofillObserver = new MutationObserver(() => {
-    disableGlobalAutofill();
+// Re-apply to any inputs added dynamically (discount stack rows, history items, etc.)
+const autofillObserver = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+        for (const node of m.addedNodes) {
+            if (node.nodeType !== 1) continue;
+            if (node.matches && (node.matches('input, select, textarea') || node.querySelector?.('input, select, textarea'))) {
+                disableGlobalAutofill();
+                return;
+            }
+        }
+    }
 });
 autofillObserver.observe(document.documentElement, { childList: true, subtree: true });
 </script>
