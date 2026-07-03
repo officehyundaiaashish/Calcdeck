@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2190,42 +2187,6 @@ body.light-mode .gst-split-row .split-val { color: #0284c7; }
     justify-content: flex-end;
 }
 
-/* Per-gram enhancements */
-.pg-metal-toggle {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-}
-.metal-btn {
-    flex: 1;
-    min-width: 70px;
-    background: rgba(255,255,255,0.06);
-    color: #cbd5e1;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 9px 6px;
-    border-radius: 0.8rem;
-    font-size: 0.72rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.18s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-}
-.metal-btn .metal-symbol { font-size: 1.05rem; font-weight: 800; line-height: 1; }
-.metal-btn:hover { background: rgba(56,189,248,0.1); color: #7dd3fc; border-color: rgba(56,189,248,0.3); transform: translateY(-1px); }
-.metal-btn.active {
-    background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(129,140,248,0.18));
-    color: #fff;
-    border-color: rgba(56,189,248,0.55);
-    box-shadow: 0 4px 14px -4px rgba(99,102,241,0.45);
-}
-body.light-mode .metal-btn { background: rgba(0,0,0,0.04); color: #475569; border-color: rgba(0,0,0,0.1); }
-body.light-mode .metal-btn:hover { background: rgba(2,132,199,0.1); color: #0284c7; border-color: rgba(2,132,199,0.3); }
-body.light-mode .metal-btn.active { background: linear-gradient(135deg, rgba(2,132,199,0.18), rgba(79,70,229,0.18)); color: #0f172a; border-color: rgba(2,132,199,0.55); }
-
 /* Making-charges fancy swatches */
 .fancy-swatch[data-tier="mc-none"]     { background: linear-gradient(135deg, #64748b, #475569); }
 .fancy-swatch[data-tier="mc-percent"]  { background: linear-gradient(135deg, #38bdf8, #0284c7); }
@@ -2954,10 +2915,6 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
     .gold-rate-widget .grw-footer { flex-direction: column; align-items: stretch; gap: 6px; }
     .gold-rate-widget .grw-use-btn { width: 100%; justify-content: center; padding: 9px 12px; font-size: 0.78rem; }
 
-    /* PG metal toggle — wrap on mobile, smaller */
-    .pg-metal-toggle { flex-wrap: wrap; gap: 4px; }
-    .metal-btn { padding: 7px 8px; font-size: 0.7rem; }
-
     /* Discount mode tabs — wrap */
     .mode-tabs { flex-wrap: wrap; gap: 4px; }
     .mode-tab { padding: 7px 10px; font-size: 0.72rem; }
@@ -3163,14 +3120,6 @@ body.light-mode .veg-widget .vw-card .veg-change.flat { background: rgba(71,85,1
     <div id="panel-pergram" class="tab-panel" style="display:none">
         <div class="two-columns">
             <div>
-                <div class="pg-metal-toggle">
-                    <button class="metal-btn active" data-metal="general" onclick="setPgMetal('general')"><span class="metal-symbol">§</span><span>General</span></button>
-                    <button class="metal-btn" data-metal="jewellery" onclick="setPgMetal('jewellery')"><span class="metal-symbol">Au</span><span>Jewellery</span></button>
-                    <button class="metal-btn" data-metal="grocery" onclick="setPgMetal('grocery')"><span class="metal-symbol">⚖</span><span>Grocery</span></button>
-                    <button class="metal-btn" data-metal="spices" onclick="setPgMetal('spices')"><span class="metal-symbol">🌶</span><span>Spices</span></button>
-                    <button class="metal-btn" data-metal="cloth" onclick="setPgMetal('cloth')"><span class="metal-symbol">▦</span><span>Cloth</span></button>
-                    <button class="metal-btn" data-metal="other" onclick="setPgMetal('other')"><span class="metal-symbol">··</span><span>Other</span></button>
-                </div>
                 <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/><path d="M9 9h6v6H9z"/></svg> Total Price (₹)</label><input type="number" id="pgPrice" placeholder="e.g. 250"></div>
                 <div class="row"><label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M4 12h16"/></svg> Weight / Quantity</label><input type="number" id="pgWeight" placeholder="e.g. 500">
                     <div class="preset-row">
@@ -3965,12 +3914,6 @@ amountInput?.addEventListener('input', () => resetComparisonBtnState('gst'));
 document.getElementById('manualGSTInput')?.addEventListener('input', () => resetComparisonBtnState('gst'));
 
 // ---------- PER GRAM WITH FIXED HISTORY (no duplicate, no undefined) ----------
-let pgMetal = 'general';
-window.setPgMetal = (m) => {
-    pgMetal = m;
-    document.querySelectorAll('.metal-btn').forEach(b => b.classList.toggle('active', b.dataset.metal === m));
-    resetComparisonBtnState('pergram');
-};
 window.setPgWeight = (w) => {
     document.getElementById('pgWeight').value = w;
     resetComparisonBtnState('pergram');
@@ -4058,7 +4001,7 @@ window.calcPerGram = ()=>{
         document.getElementById('pgPerTolaRow').style.display='none';
         document.getElementById('pgPerBhoriRow').style.display='none';
         let desiredQty = parseFloat(document.getElementById('pgDesiredQty').value);
-        let historyEntry = { type:'pergram', price:totalPriceWithMaking.toFixed(2), weightDisplay:weightDisplay, perUnitLabel:'Price per Piece', perUnit:perUnit.toFixed(2), priceLabel:'Total Price', unit: 'Piece', metal: pgMetal, making: making.toFixed(2) };
+        let historyEntry = { type:'pergram', price:totalPriceWithMaking.toFixed(2), weightDisplay:weightDisplay, perUnitLabel:'Price per Piece', perUnit:perUnit.toFixed(2), priceLabel:'Total Price', unit: 'Piece', making: making.toFixed(2) };
         if(!isNaN(desiredQty) && desiredQty > 0) {
             historyEntry.desiredQty = desiredQty + ' pcs';
             historyEntry.desiredAmount = (perUnit * desiredQty).toFixed(2);
@@ -4077,7 +4020,7 @@ window.calcPerGram = ()=>{
         document.getElementById('pgPerBhoriRow').style.display='flex';
         document.getElementById('pgResultPerBhori').innerText='₹'+(perUnit*46.6553).toFixed(2);
         let desiredQty = parseFloat(document.getElementById('pgDesiredQty').value);
-        let historyEntry = { type:'pergram', price:totalPriceWithMaking.toFixed(2), weightDisplay:weightDisplay, perUnitLabel:'Price per Gram', perUnit:perUnit.toFixed(4), per100g:(perUnit*100).toFixed(2), per1kg:(perUnit*1000).toFixed(2), perTola:(perUnit*11.6638).toFixed(2), perBhori:(perUnit*46.6553).toFixed(2), priceLabel:'Total Price', unit: PG_UNIT_LABELS[unit], metal: pgMetal, making: making.toFixed(2) };
+        let historyEntry = { type:'pergram', price:totalPriceWithMaking.toFixed(2), weightDisplay:weightDisplay, perUnitLabel:'Price per Gram', perUnit:perUnit.toFixed(4), per100g:(perUnit*100).toFixed(2), per1kg:(perUnit*1000).toFixed(2), perTola:(perUnit*11.6638).toFixed(2), perBhori:(perUnit*46.6553).toFixed(2), priceLabel:'Total Price', unit: PG_UNIT_LABELS[unit], making: making.toFixed(2) };
         if(!isNaN(desiredQty) && desiredQty > 0) {
             let desiredQtyInGrams = unit==='kg' ? desiredQty*1000 : (unit==='tola'? desiredQty*11.6638 : (unit==='bhori'? desiredQty*46.6553 : desiredQty));
             historyEntry.desiredQty = desiredQty + ' ' + (unit==='kg'?'kg':unit==='tola'?'tola':unit==='bhori'?'bhori':'g');
