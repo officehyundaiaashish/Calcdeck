@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>CalcDeck | PerGram + GST + Discount + Live Rates</title>
-<meta name="theme-color" content="#0f172a">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="CalcDeck">
-<meta name="description" content="All-in-one toolkit: GST, Per Gram pricing, Discount calculator — PWA ready.">
-<!-- Inline PWA Manifest for single-file deployment -->
-<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22CalcDeck%22,%22short_name%22:%22CalcDeck%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%230f172a%22,%22theme_color%22:%22%2338bdf8%22,%22icons%22:[{%22src%22:%22https://via.placeholder.com/192x192/0f172a/38bdf8?text=CD%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22},{%22src%22:%22https://via.placeholder.com/512x512/0f172a/38bdf8?text=CD%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}">
+<meta name="description" content="All-in-one toolkit: GST, Per Gram pricing, Discount calculator.">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon.png">
+<!-- Status bar adapts to system theme on Android Chrome -->
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef2ff">
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 <style>
 * {
@@ -6020,7 +6018,7 @@ if (document.readyState === 'loading') {
     enhanceNumberInputs();
 }
 
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js').catch(e=>console);
+
 
 // ---------- DISABLE GOOGLE PASSWORD MANAGER, GOOGLE PAY & ALL AUTOFILL GLOBALLY (phones) ----------
 // Four-layer defense that permanently kills Google Password Manager + Google Pay overlay above keyboard:
@@ -6123,6 +6121,164 @@ const autofillObserver = new MutationObserver((mutations) => {
     }
 });
 autofillObserver.observe(document.documentElement, { childList: true, subtree: true });
+
+/* ---- Service Worker Registration & Install Prompt ---- */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+            // Check for updates every time the page gains focus
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') reg.update();
+            });
+        }).catch(err => console.warn('SW registration failed:', err));
+    });
+}
+
+// Install prompt
+let _pwaPrompt = null;
+const _installBanner = document.getElementById('pwaInstallBanner');
+
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    _pwaPrompt = e;
+    if (_installBanner) _installBanner.classList.add('show');
+});
+
+window.addEventListener('appinstalled', () => {
+    if (_installBanner) _installBanner.classList.remove('show');
+    _pwaPrompt = null;
+});
+
+function _triggerInstall() {
+    if (!_pwaPrompt) return;
+    _pwaPrompt.prompt();
+    _pwaPrompt.userChoice.then(() => {
+        _pwaPrompt = null;
+        if (_installBanner) _installBanner.classList.remove('show');
+    });
+}
+
+function _dismissInstall() {
+    if (_installBanner) _installBanner.classList.remove('show');
+}
+
+// Sync theme-color meta with live light/dark toggle
+(function syncThemeColorMeta() {
+    const darkMeta  = document.querySelector('meta[name="theme-color"][media*="dark"]');
+    const lightMeta = document.querySelector('meta[name="theme-color"][media*="light"]');
+    if (!darkMeta || !lightMeta) return;
+    function apply() {
+        const isLight = document.body.classList.contains('light-mode');
+        darkMeta.content  = isLight ? '#eef2ff' : '#0f172a';
+        lightMeta.content = isLight ? '#eef2ff' : '#0f172a';
+    }
+    // Observe class changes on body (light-mode toggle)
+    new MutationObserver(apply).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    apply();
+}());
 </script>
+
+<!-- PWA Install Banner -->
+<div id="pwaInstallBanner" role="complementary" aria-label="Install app">
+    <div class="pwa-banner-icon">
+        <img src="./icon.png" alt="CalcDeck icon" width="40" height="40">
+    </div>
+    <div class="pwa-banner-text">
+        <strong>Install CalcDeck</strong>
+        <span>Add to home screen for a native experience</span>
+    </div>
+    <button class="pwa-install-btn" onclick="_triggerInstall()" aria-label="Install app">Install</button>
+    <button class="pwa-dismiss-btn" onclick="_dismissInstall()" aria-label="Dismiss">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+</div>
+
+<style>
+/* PWA Install Banner */
+#pwaInstallBanner {
+    position: fixed;
+    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(18, 25, 45, 0.97) 0%, rgba(30, 41, 59, 0.97) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 1.5rem;
+    padding: 14px 16px 14px 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(56,189,248,0.08);
+    z-index: 9999;
+    width: min(90vw, 420px);
+    transition: bottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: #f1f5f9;
+}
+#pwaInstallBanner.show {
+    bottom: 24px;
+}
+body.light-mode #pwaInstallBanner {
+    background: linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(238,242,255,0.97) 100%);
+    border-color: rgba(2, 132, 199, 0.25);
+    color: #0f172a;
+}
+.pwa-banner-icon {
+    flex-shrink: 0;
+}
+.pwa-banner-icon img {
+    border-radius: 10px;
+    display: block;
+}
+.pwa-banner-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+.pwa-banner-text strong {
+    font-size: 0.875rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.pwa-banner-text span {
+    font-size: 0.72rem;
+    opacity: 0.65;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pwa-install-btn {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 0.9rem;
+    border: none;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+}
+.pwa-install-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(99,102,241,0.5);
+}
+.pwa-dismiss-btn {
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    color: inherit;
+    opacity: 0.45;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.15s;
+}
+.pwa-dismiss-btn:hover { opacity: 0.85; }
+</style>
 </body>
 </html>
