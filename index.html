@@ -6023,19 +6023,41 @@ if (document.readyState === 'loading') {
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js').catch(e=>console);
 
 // ---------- DISABLE GOOGLE PASSWORD MANAGER, GOOGLE PAY & ALL AUTOFILL GLOBALLY (phones) ----------
-// Three-layer defense that together reliably kills Google Password Manager + Google Pay popups:
-//   (a) autocomplete="new-password" — the strongest signal; PMs treat this as "do not autofill"
-//   (b) Initial readonly — PMs and autofill engines skip readonly fields on initial paint
+// Four-layer defense that permanently kills Google Password Manager + Google Pay overlay above keyboard:
+//   (a) autocomplete="one-time-code" on inputs — Chrome's strongest signal to suppress its floating bar
+//   (b) autocomplete="off" on all <form> elements — prevents Chrome recognising the form as login/payment
+//   (c) Initial readonly — autofill engines skip readonly fields on initial paint
 //       (the readonly is removed the moment the user genuinely taps/types into the field)
-//   (c) Per-manager ignore data-attributes — covers 1Password, LastPass, Bitwarden, Dashlane, Proton Pass
+//   (d) Per-manager ignore data-attributes — covers 1Password, LastPass, Bitwarden, Dashlane, Proton Pass
 function disableGlobalAutofill() {
+    // --- Target <form> elements first ---
+    // Chrome's overlay is triggered at the form level; setting autocomplete="off" here is the
+    // single most effective way to silence Google Password Manager & Google Pay on Android.
+    document.querySelectorAll('form').forEach(form => {
+        form.setAttribute('autocomplete', 'off');
+        form.setAttribute('data-form-type', 'other');
+    });
+
+    // --- Target all input / select / textarea elements ---
     const allInputs = document.querySelectorAll('input, select, textarea');
     allInputs.forEach(el => {
         if (el.dataset && el.dataset.autofillLocked === '1') return; // already processed
         if (el.dataset) el.dataset.autofillLocked = '1';
 
-        // (a) Strongest browser/PM-level signal
-        el.setAttribute('autocomplete', 'new-password');
+        // (a) Chrome-specific strongest signal: "one-time-code" opts the field completely out
+        //     of Google Password Manager and Google Pay suggestions on Android Chrome.
+        //     "new-password" is the fallback understood by other browsers & password managers.
+        const tag = el.tagName;
+        const type = (el.type || '').toLowerCase();
+        if (tag === 'INPUT' && type !== 'hidden' && type !== 'submit' && type !== 'button' && type !== 'reset') {
+            el.setAttribute('autocomplete', 'one-time-code');
+        } else if (tag !== 'TEXTAREA') {
+            el.setAttribute('autocomplete', 'new-password');
+        } else {
+            el.setAttribute('autocomplete', 'off');
+        }
+
+        // (b) Per-manager ignore attributes (covers all major password managers)
         el.setAttribute('data-form-type', 'other');
         el.setAttribute('data-bitwarden-watching', 'false');
         el.setAttribute('data-1p-ignore', 'true');
@@ -6043,16 +6065,10 @@ function disableGlobalAutofill() {
         el.setAttribute('data-bwignore', 'true');
         el.setAttribute('data-dashlane-ignore', 'true');
         el.setAttribute('data-keeper-ignore', 'true');
+        el.setAttribute('data-protonpass-ignore', 'true');
         el.setAttribute('x-autocompletetype', 'off');
-        el.setAttribute('role', 'presentation');
 
-        // For non-text widgets, also block payment-related autocomplete tokens.
-        if (el.tagName !== 'TEXTAREA') {
-            // Re-affirm that no payment/identity autofill can ever bind to this field.
-            el.setAttribute('autocomplete', 'new-password'); // (re-set in case browser overrode)
-        }
-
-        // (b) Start readonly so PMs/payment-managers skip the field on initial page render.
+        // (c) Start readonly so PMs/payment-managers skip the field on initial page render.
         //     Unlock the moment the user genuinely interacts (pointerdown / touchstart / keydown / beforeinput).
         try {
             el.setAttribute('readonly', 'readonly');
@@ -6062,31 +6078,32 @@ function disableGlobalAutofill() {
                 el.removeEventListener('touchstart', unlock, true);
                 el.removeEventListener('keydown', unlock, true);
                 el.removeEventListener('beforeinput', unlock, true);
+                el.removeEventListener('focus', unlock, true);
             };
             el.addEventListener('pointerdown', unlock, true);
             el.addEventListener('touchstart', unlock, true);
             el.addEventListener('keydown', unlock, true);
             el.addEventListener('beforeinput', unlock, true);
+            el.addEventListener('focus', unlock, true);
         } catch (e) { /* readonly may be unsupported on some input types — that's fine */ }
 
-        // (c) Suppress text-correction suggestions on phones
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        // (d) Suppress text-correction suggestions on phones
+        if (tag === 'INPUT' || tag === 'TEXTAREA') {
             el.setAttribute('autocorrect', 'off');
             el.setAttribute('autocapitalize', 'off');
             el.setAttribute('spellcheck', 'false');
         }
 
-        // (d) For number inputs, force numeric inputmode to keep Google Pay from suggesting cards
-        if (el.tagName === 'INPUT' && (el.type === 'number' || el.type === 'text')) {
-            // do not set type here (would break JS), just reinforce inputmode
+        // (e) For number/text inputs, reinforce inputmode to keep Google Pay from suggesting cards
+        if (tag === 'INPUT' && (type === 'number' || type === 'text')) {
             if (!el.getAttribute('inputmode')) {
-                el.setAttribute('inputmode', el.type === 'number' ? 'decimal' : 'text');
+                el.setAttribute('inputmode', type === 'number' ? 'decimal' : 'text');
             }
         }
     });
 }
 
-// Initial pass
+// Initial pass — run as early as possible
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', disableGlobalAutofill);
 } else {
