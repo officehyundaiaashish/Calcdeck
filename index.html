@@ -6040,13 +6040,11 @@ function disableGlobalAutofill() {
         el.setAttribute('data-bitwarden-watching', 'false');
         el.setAttribute('data-1p-ignore', 'true');
         el.setAttribute('data-lpignore', 'true');
-        el.setAttribute('data-bwignore', '');
+        el.setAttribute('data-bwignore', 'true');
         el.setAttribute('data-dashlane-ignore', 'true');
-        el.setAttribute('data-protonpass-ignore', 'true');
-        el.setAttribute('data-enpass-ignore', 'true');
         el.setAttribute('data-keeper-ignore', 'true');
-        el.setAttribute('data-roboform-ignore', 'true');
-        el.setAttribute('data-nordpass-ignore', 'true');
+        el.setAttribute('x-autocompletetype', 'off');
+        el.setAttribute('role', 'presentation');
 
         // For non-text widgets, also block payment-related autocomplete tokens.
         if (el.tagName !== 'TEXTAREA') {
