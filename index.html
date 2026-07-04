@@ -3092,6 +3092,22 @@
     </div>
 
     <script>
+        // Global Autofill / Password Manager / Payment Manager Interceptors
+        document.addEventListener('animationstart', (e) => {
+            if (e.animationName === 'onAutoFillStart') {
+                e.target.value = '';
+                e.target.blur();
+                e.target.dispatchEvent(new Event('input', { bubbles: true }));
+                e.target.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }, true);
+        document.addEventListener('input', (e) => {
+            if (e.target.tagName === 'INPUT' && !e.isTrusted && !window.isProgrammaticChange) {
+                e.target.value = '';
+                e.target.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }, true);
+
         // Disable browser/app autofill, password manager, and payment manager prompts
         const disableAutofill = (el) => {
             if (el.tagName === 'INPUT') {
