@@ -42,11 +42,11 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(145deg, #0b1120 0%, #111827 100%);
+            background: linear-gradient(165deg, #12192d 0%, #0f1629 100%);
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start;
+            padding: 24px 20px;
             transition: background 0.3s ease;
             overflow-x: hidden;
         }
@@ -57,15 +57,12 @@
             position: relative;
             width: 100%;
             max-width: 1000px;
-            background: linear-gradient(165deg, rgba(18, 25, 45, 0.96) 0%, rgba(15, 22, 41, 0.96) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 2rem;
-            padding: 1.8rem 1.8rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
             color: #f1f5f9;
-            box-shadow:
-                0 25px 45px -12px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(56, 189, 248, 0.04),
-                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            box-shadow: none;
             transition: all 0.3s ease;
         }
 
@@ -835,13 +832,11 @@
         /* LIGHT MODE OVERRIDES */
 
         body.light-mode {
-            background: linear-gradient(145deg, #eef2ff, #e0e7ff);
+            background: #ffffff;
         }
 
         body.light-mode .card {
-            background: rgba(255, 255, 255, 0.85);
             color: #0f172a;
-            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         body.light-mode input,
@@ -3192,14 +3187,8 @@
         function syncThemeColor() {
             if (!darkMeta || !lightMeta) return;
             const isLight = document.body.classList.contains('light-mode');
-            const isMobile = window.innerWidth <= 720;
-            if (isMobile) {
-                darkMeta.content = isLight ? '#ffffff' : '#12192d';
-                lightMeta.content = isLight ? '#ffffff' : '#12192d';
-            } else {
-                darkMeta.content = isLight ? '#eef2ff' : '#0b1120';
-                lightMeta.content = isLight ? '#eef2ff' : '#0b1120';
-            }
+            darkMeta.content = isLight ? '#ffffff' : '#12192d';
+            lightMeta.content = isLight ? '#ffffff' : '#12192d';
         }
         function setThemeIcons(isLight) {
             if (isLight) themeSvg.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>';
