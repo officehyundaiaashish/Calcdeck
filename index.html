@@ -1907,7 +1907,7 @@
         }
 
         .result-actions {
-            display: flex;
+            display: none;
             gap: 8px;
             margin-top: 10px;
             justify-content: flex-end;
@@ -3620,7 +3620,10 @@
             document.getElementById('gstAmount').innerText = '₹' + gstAmt.toFixed(2);
             document.getElementById('total').innerText = '₹' + total.toFixed(2);
             renderGstSplit(amt, gstAmt);
-            if (amt > 0) addHistoryEntry({ type: 'gst_add', amount: amt, gstRate: gst, gstAmount: gstAmt, total: total });
+            if (amt > 0) {
+                addHistoryEntry({ type: 'gst_add', amount: amt, gstRate: gst, gstAmount: gstAmt, total: total });
+                document.querySelector('#panel-gst .result-actions').style.display = 'flex';
+            }
         };
         window.removeGST = () => {
             let amt = parseFloat(document.getElementById('val_a').value) || 0;
@@ -3631,15 +3634,29 @@
             document.getElementById('gstAmount').innerText = '₹' + gstAmt.toFixed(2);
             document.getElementById('total').innerText = '₹' + amt.toFixed(2);
             renderGstSplit(base, gstAmt);
-            if (amt > 0) addHistoryEntry({ type: 'gst_remove', amount: base, gstRate: gst, gstAmount: gstAmt, total: amt });
+            if (amt > 0) {
+                addHistoryEntry({ type: 'gst_remove', amount: base, gstRate: gst, gstAmount: gstAmt, total: amt });
+                document.querySelector('#panel-gst .result-actions').style.display = 'flex';
+            }
         };
         window.copyGstResult = () => {
             const txt = `Base: ${document.getElementById('base').innerText} | GST: ${document.getElementById('gstAmount').innerText} | Total: ${document.getElementById('total').innerText}`;
             navigator.clipboard?.writeText(txt).then(() => showToast('GST result copied'));
         };
         const clearAmount = document.getElementById('clearAmtBtn'), amountInput = document.getElementById('val_a');
-        amountInput?.addEventListener('input', () => { clearAmount.style.display = amountInput.value ? 'block' : 'none'; });
-        clearAmount?.addEventListener('click', () => { amountInput.value = ''; clearAmount.style.display = 'none'; amountInput.focus(); resetComparisonBtnState('gst'); });
+        amountInput?.addEventListener('input', () => {
+            clearAmount.style.display = amountInput.value ? 'block' : 'none';
+            if (!amountInput.value) {
+                document.querySelector('#panel-gst .result-actions').style.display = 'none';
+            }
+        });
+        clearAmount?.addEventListener('click', () => {
+            amountInput.value = '';
+            clearAmount.style.display = 'none';
+            document.querySelector('#panel-gst .result-actions').style.display = 'none';
+            amountInput.focus();
+            resetComparisonBtnState('gst');
+        });
         amountInput?.addEventListener('input', () => resetComparisonBtnState('gst'));
         document.getElementById('val_m_g')?.addEventListener('input', () => resetComparisonBtnState('gst'));
 
@@ -3707,6 +3724,7 @@
         window.calcPerGram = () => {
             let price = parseFloat(document.getElementById('val_p_p').value) || 0, weight = parseFloat(document.getElementById('val_p_w').value) || 0, unit = document.getElementById('pgUnit').value;
             if (price <= 0 || weight <= 0) { alert('Valid price and weight required'); return; }
+            document.querySelector('#panel-pergram .result-actions').style.display = 'flex';
 
             const weightInGrams = getPgWeightInGrams();
             const making = calcPgMakingCharges(price, weightInGrams);
@@ -3794,6 +3812,7 @@
             document.getElementById('val_p_p').value = '';
             document.getElementById('val_p_w').value = '';
             document.getElementById('val_p_d').value = '';
+            document.querySelector('#panel-pergram .result-actions').style.display = 'none';
             const pgMakingVal = document.getElementById('pgMakingValue');
             if (pgMakingVal) pgMakingVal.value = '';
             const pgMakingType = document.getElementById('pgMakingType');
@@ -3900,7 +3919,11 @@
         };
         window.calcStackedDiscount = () => {
             let orig = parseFloat(document.getElementById('val_s_o').value);
-            if (!orig || orig <= 0) return;
+            if (!orig || orig <= 0) {
+                document.querySelector('#panel-discount .result-actions').style.display = 'none';
+                return;
+            }
+            document.querySelector('#panel-discount .result-actions').style.display = 'flex';
             let current = orig;
             let totalSaved = 0;
             document.querySelectorAll('#stackList .stack-row').forEach(row => {
@@ -3924,7 +3947,11 @@
             const buyQty = parseFloat(document.getElementById('val_b_b').value);
             const getQty = parseFloat(document.getElementById('val_b_g').value);
             const totalQty = parseFloat(document.getElementById('val_b_t').value);
-            if (!unitPrice || !buyQty || !getQty || !totalQty || buyQty <= 0 || getQty <= 0 || totalQty <= 0) return;
+            if (!unitPrice || !buyQty || !getQty || !totalQty || buyQty <= 0 || getQty <= 0 || totalQty <= 0) {
+                document.querySelector('#panel-discount .result-actions').style.display = 'none';
+                return;
+            }
+            document.querySelector('#panel-discount .result-actions').style.display = 'flex';
             const setQty = buyQty + getQty;
             const sets = Math.floor(totalQty / setQty);
             const remainder = totalQty % setQty;
@@ -3945,7 +3972,10 @@
             let cp = parseFloat(document.getElementById('val_m_c').value);
             let markupPct = parseFloat(document.getElementById('val_m_m').value);
             let sp = parseFloat(document.getElementById('val_m_s').value);
-            if (!cp || cp <= 0) return;
+            if (!cp || cp <= 0) {
+                document.querySelector('#panel-discount .result-actions').style.display = 'none';
+                return;
+            }
             if (sp > 0 && (!markupPct || markupPct === 0)) {
                 // SP given, derive markup
                 markupPct = ((sp - cp) / cp) * 100;
@@ -3959,7 +3989,10 @@
             } else {
                 return;
             }
-            if (!sp || sp <= 0) return;
+            if (!sp || sp <= 0) {
+                document.querySelector('#panel-discount .result-actions').style.display = 'none';
+                return;
+            }
             const profit = sp - cp;
             const marginPct = (profit / sp) * 100;
             document.getElementById('originalDisplay').innerText = '₹' + cp.toFixed(2) + ' (CP)';
@@ -3970,6 +4003,7 @@
             document.getElementById('marginProfit').innerText = '₹' + profit.toFixed(2);
             document.getElementById('marginPctRow').style.display = 'flex';
             document.getElementById('marginPct').innerText = marginPct.toFixed(2) + '%';
+            document.querySelector('#panel-discount .result-actions').style.display = 'flex';
         };
         window.calcDiscount = () => {
             if (discountCalcMode === 'stacked') { calcStackedDiscount(); return; }
@@ -3985,6 +4019,7 @@
             document.getElementById('finalPrice').innerText = '₹' + final.toFixed(2);
             document.getElementById('effectivePercent').innerText = eff.toFixed(2) + '%';
             addHistoryEntry({ type: 'discount', original: orig.toFixed(2), discountValue: val, discountType: discountMode, saved: saved.toFixed(2), final: final.toFixed(2) });
+            document.querySelector('#panel-discount .result-actions').style.display = 'flex';
         };
         window.clearDiscount = () => {
             document.getElementById('val_d_p').value = '';
@@ -4002,6 +4037,7 @@
             document.getElementById('savedAmount').innerText = '₹0.00';
             document.getElementById('finalPrice').innerText = '₹0.00';
             document.getElementById('effectivePercent').innerText = '0%';
+            document.querySelector('#panel-discount .result-actions').style.display = 'none';
             document.getElementById('bogoExtraRow').style.display = 'none';
             document.getElementById('bogoFreeCount').innerText = '0';
             document.getElementById('marginProfitRow').style.display = 'none';
@@ -4518,6 +4554,7 @@
             const avg = parseFloat(document.getElementById('val_f_a').value) || 0;
             const dist = parseFloat(document.getElementById('val_f_d').value) || 0;
             if (price <= 0 || avg <= 0 || dist <= 0) { alert('Please enter valid price, mileage, and distance'); return; }
+            document.querySelector('#panel-fuel .result-actions').style.display = 'flex';
 
             const fuelNeeded = dist / avg;
             const totalCost = fuelNeeded * price;
@@ -4549,6 +4586,7 @@
             document.getElementById('val_f_p').value = '';
             document.getElementById('val_f_a').value = '';
             document.getElementById('val_f_d').value = '';
+            document.querySelector('#panel-fuel .result-actions').style.display = 'none';
             const unit = selectedFuelType === 'cng' ? 'kg' : 'L';
             const fuelTypeLabels = { petrol: 'Petrol', diesel: 'Diesel', cng: 'CNG' };
             document.getElementById('fuelTypeDisplay').innerText = fuelTypeLabels[selectedFuelType];
