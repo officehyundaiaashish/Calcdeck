@@ -2834,6 +2834,27 @@
     </div>
 
     <script>
+        // Disable browser/app autofill, password manager, and payment manager prompts
+        const disableAutofill = (el) => {
+            if (el.tagName === 'INPUT') {
+                el.setAttribute('autocomplete', 'new-password');
+                el.setAttribute('autocorrect', 'off');
+                el.setAttribute('autocapitalize', 'none');
+                el.setAttribute('spellcheck', 'false');
+                el.setAttribute('data-lpignore', 'true');
+                el.setAttribute('data-private', 'true');
+            }
+        };
+        document.querySelectorAll('input').forEach(disableAutofill);
+        new MutationObserver((mutations) => {
+            mutations.forEach(m => m.addedNodes.forEach(node => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    if (node.tagName === 'INPUT') disableAutofill(node);
+                    else node.querySelectorAll('input').forEach(disableAutofill);
+                }
+            }));
+        }).observe(document.body, { childList: true, subtree: true });
+
         // ---------- THEME ----------
         const themeBtn = document.getElementById('themeToggleBtn');
         const themeSvg = themeBtn.querySelector('svg');
