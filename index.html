@@ -98,8 +98,8 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #2dd4bf, #029D9D);
-            box-shadow: 0 0 10px rgba(45, 212, 191, 0.6);
+            background: linear-gradient(135deg, #029D9D, #016b6b);
+            box-shadow: 0 0 10px rgba(2, 157, 157, 0.6);
         }
 
         .top-bar .icon-group {
@@ -124,7 +124,7 @@
             font-size: 2.4rem;
             font-weight: 800;
             letter-spacing: -1px;
-            background: linear-gradient(135deg, #2dd4bf 0%, #029D9D 40%, #06b6d4 75%, #10b981 100%);
+            background: linear-gradient(135deg, #029D9D 0%, #018080 40%, #06b6d4 75%, #10b981 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -132,15 +132,15 @@
             text-align: center;
             position: relative;
             line-height: 1.1;
-            filter: drop-shadow(0 0 20px rgba(13, 148, 136, 0.25));
+            filter: drop-shadow(0 0 20px rgba(2, 157, 157, 0.25));
         }
 
         body.light-mode h1 {
-            background: linear-gradient(135deg, #0f766e 0%, #029D9D 40%, #0891b2 75%, #059669 100%);
+            background: linear-gradient(135deg, #015454 0%, #029D9D 40%, #0891b2 75%, #059669 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            filter: drop-shadow(0 0 15px rgba(13, 148, 136, 0.15));
+            filter: drop-shadow(0 0 15px rgba(2, 157, 157, 0.15));
         }
 
         /* icon buttons */
@@ -164,11 +164,11 @@
         }
 
         .icon-btn:hover {
-            background: linear-gradient(135deg, rgba(45, 212, 191, 0.18), rgba(13, 148, 136, 0.18));
-            border-color: rgba(45, 212, 191, 0.4);
+            background: linear-gradient(135deg, rgba(2, 157, 157, 0.18), rgba(1, 107, 107, 0.18));
+            border-color: rgba(2, 157, 157, 0.4);
             color: #fff;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px -6px rgba(45, 212, 191, 0.4);
+            box-shadow: 0 6px 16px -6px rgba(2, 157, 157, 0.4);
         }
 
         .icon-btn:active {
@@ -244,7 +244,7 @@
 
         .tab-btn.tab-calc:hover:not(.active) {
             color: #e2e8f0;
-            background: rgba(45, 212, 191, 0.08);
+            background: rgba(2, 157, 157, 0.08);
         }
 
         .tab-btn.tab-calc:hover:not(.active) svg {
@@ -253,10 +253,10 @@
 
         .tab-btn.tab-calc.active {
             color: #ffffff;
-            background: linear-gradient(135deg, #2dd4bf 0%, #029D9D 55%, #0f766e 100%);
+            background: linear-gradient(135deg, #029D9D 0%, #018080 55%, #015454 100%);
             box-shadow:
-                0 8px 22px -6px rgba(13, 148, 136, 0.55),
-                0 2px 6px rgba(45, 212, 191, 0.35),
+                0 8px 22px -6px rgba(1, 107, 107, 0.55),
+                0 2px 6px rgba(2, 157, 157, 0.35),
                 inset 0 1px 0 rgba(255, 255, 255, 0.25);
         }
 
@@ -348,7 +348,7 @@
 
         input:focus {
             background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.3);
+            box-shadow: 0 0 0 2px rgba(2, 157, 157, 0.3);
         }
 
         /* ========== GLOBAL ANTI-AUTOFILL + ANTI-PASSWORD-MANAGER + ANTI-PAYMENT-MANAGER (phones) ========== */
@@ -492,7 +492,7 @@
         .discount-saved {
             font-size: 1.5rem;
             font-weight: 800;
-            color: #2dd4bf;
+            color: #029D9D;
         }
 
         hr {
@@ -537,7 +537,7 @@
 
         .gst-menu div:hover,
         .unit-menu div:hover {
-            background: rgba(45, 212, 191, 0.2);
+            background: rgba(2, 157, 157, 0.2);
         }
 
         .gst-manual-input-wrapper input {
@@ -618,12 +618,12 @@
         }
 
         .calc-btn.operator {
-            background: #115e59;
-            color: #99f6e4;
+            background: #014d4d;
+            color: #b3f0f0;
         }
 
         .calc-btn.equals {
-            background: #14b8a6;
+            background: #029D9D;
             color: white;
             grid-column: span 2;
         }
@@ -701,7 +701,7 @@
         }
 
         .discount-type-btn.active {
-            background: #14b8a6;
+            background: #029D9D;
             color: white;
         }
 
@@ -843,13 +843,13 @@
         }
 
         body.light-mode .tab-btn.tab-calc.active {
-            background: linear-gradient(135deg, #029D9D 0%, #0f766e 55%, #115e59 100%);
+            background: linear-gradient(135deg, #029D9D 0%, #018080 55%, #015454 100%);
             color: #fff;
-            box-shadow: 0 8px 22px -6px rgba(13, 148, 136, 0.45), 0 2px 6px rgba(45, 212, 191, 0.35);
+            box-shadow: 0 8px 22px -6px rgba(1, 107, 107, 0.45), 0 2px 6px rgba(2, 157, 157, 0.35);
         }
 
         body.light-mode .tab-btn.tab-calc:hover:not(.active) {
-            background: rgba(13, 148, 136, 0.08);
+            background: rgba(1, 107, 107, 0.08);
             color: #029D9D;
         }
 
@@ -976,14 +976,14 @@
         body.light-mode .total,
         body.light-mode .pg-total,
         body.light-mode .discount-saved {
-            color: #029D9D;
+            color: #0d9488;
         }
 
         /* COMPARISON TOOL STYLES */
 
         .comparison-btn.has-items {
-            background: rgba(45, 212, 191, 0.25);
-            color: #2dd4bf;
+            background: rgba(2, 157, 157, 0.25);
+            color: #029D9D;
         }
 
         .comparison-btn.has-items::after {
@@ -1114,10 +1114,10 @@
             margin-top: 10px;
             width: 100%;
             padding: 10px;
-            background: rgba(45, 212, 191, 0.15);
-            border: 1px dashed #2dd4bf;
+            background: rgba(2, 157, 157, 0.15);
+            border: 1px dashed #029D9D;
             border-radius: 1rem;
-            color: #2dd4bf;
+            color: #029D9D;
             font-weight: 600;
             font-size: 0.8rem;
             cursor: pointer;
@@ -1129,7 +1129,7 @@
         }
 
         .add-to-comparison-btn:hover {
-            background: rgba(45, 212, 191, 0.25);
+            background: rgba(2, 157, 157, 0.25);
             transform: translateY(-1px);
         }
 
@@ -1145,13 +1145,13 @@
         }
 
         body.light-mode #openComparisonBtn:hover {
-            background: rgba(13, 148, 136, 0.12);
-            border-color: rgba(13, 148, 136, 0.3);
+            background: rgba(1, 107, 107, 0.12);
+            border-color: rgba(1, 107, 107, 0.3);
             color: #029D9D;
         }
 
         body.light-mode #openComparisonBtn.has-items {
-            background: rgba(13, 148, 136, 0.2);
+            background: rgba(1, 107, 107, 0.2);
             color: #029D9D;
         }
 
@@ -1178,9 +1178,9 @@
         /* SHARE BUTTON STYLES */
 
         .history-share-btn {
-            background: rgba(45, 212, 191, 0.15);
+            background: rgba(2, 157, 157, 0.15);
             border: none;
-            color: #2dd4bf;
+            color: #029D9D;
             padding: 6px 10px;
             border-radius: 8px;
             font-size: 0.7rem;
@@ -1194,7 +1194,7 @@
         }
 
         .history-share-btn:hover {
-            background: rgba(45, 212, 191, 0.3);
+            background: rgba(2, 157, 157, 0.3);
             transform: translateY(-1px);
         }
 
@@ -1205,12 +1205,12 @@
         }
 
         body.light-mode .history-share-btn {
-            background: rgba(13, 148, 136, 0.1);
+            background: rgba(1, 107, 107, 0.1);
             color: #029D9D;
         }
 
         body.light-mode .history-share-btn:hover {
-            background: rgba(13, 148, 136, 0.2);
+            background: rgba(1, 107, 107, 0.2);
         }
 
         .footer {
@@ -1275,7 +1275,7 @@
             border-radius: 1.2rem;
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.2));
             color: #f8fafc;
-            border: 1px solid rgba(45, 212, 191, 0.18);
+            border: 1px solid rgba(2, 157, 157, 0.18);
             font-size: 0.92rem;
             font-weight: 600;
             cursor: pointer;
@@ -1284,8 +1284,8 @@
         }
 
         .fancy-btn:hover {
-            border-color: rgba(45, 212, 191, 0.45);
-            background: linear-gradient(135deg, rgba(45, 212, 191, 0.10), rgba(0, 0, 0, 0.25));
+            border-color: rgba(2, 157, 157, 0.45);
+            background: linear-gradient(135deg, rgba(2, 157, 157, 0.10), rgba(0, 0, 0, 0.25));
         }
 
         .fancy-btn .fancy-btn-.input-label {
@@ -1306,7 +1306,7 @@
 
         .fancy-btn[aria-expanded="true"] .fancy-caret {
             transform: rotate(180deg);
-            color: #2dd4bf;
+            color: #029D9D;
         }
 
         .fancy-swatch {
@@ -1333,7 +1333,7 @@
         /* common essentials */
 
         .fancy-swatch[data-tier="gst-12"] {
-            background: linear-gradient(135deg, #2dd4bf, #029D9D);
+            background: linear-gradient(135deg, #029D9D, #016b6b);
         }
 
         /* processed - blue */
@@ -1359,7 +1359,7 @@
         /* Unit swatches (color-coded by category) */
 
         .fancy-swatch[data-tier="unit-g"] {
-            background: linear-gradient(135deg, #2dd4bf, #029D9D);
+            background: linear-gradient(135deg, #029D9D, #016b6b);
         }
 
         .fancy-swatch[data-tier="unit-kg"] {
@@ -1452,8 +1452,8 @@
         }
 
         .fancy-menu-search input:focus {
-            border-color: rgba(45, 212, 191, 0.4);
-            box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.18);
+            border-color: rgba(2, 157, 157, 0.4);
+            box-shadow: 0 0 0 2px rgba(2, 157, 157, 0.18);
         }
 
         .fancy-menu-list {
@@ -1489,13 +1489,13 @@
         }
 
         .fancy-option:hover {
-            background: rgba(45, 212, 191, 0.10);
-            border-color: rgba(45, 212, 191, 0.2);
+            background: rgba(2, 157, 157, 0.10);
+            border-color: rgba(2, 157, 157, 0.2);
         }
 
         .fancy-option.active {
-            background: linear-gradient(135deg, rgba(45, 212, 191, 0.18), rgba(13, 148, 136, 0.10));
-            border-color: rgba(45, 212, 191, 0.45);
+            background: linear-gradient(135deg, rgba(2, 157, 157, 0.18), rgba(1, 107, 107, 0.10));
+            border-color: rgba(2, 157, 157, 0.45);
         }
 
         .fancy-option .fancy-swatch {
