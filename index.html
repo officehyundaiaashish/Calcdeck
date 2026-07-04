@@ -577,7 +577,7 @@
             max-height: 450px;
             overflow-y: auto;
             margin: 0 -4px;
-            padding: 0 4px;
+            padding: 0 4px 12px;
         }
 
         .mini-calculator-dialog.show,
@@ -3115,7 +3115,7 @@
                 else if (entry.type === 'fuel') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 18V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v14"/><path d="M21 18H3"/><circle cx="12" cy="15" r="2"/></svg>`; title = `Fuel Cost (${entry.fuelType.toUpperCase()})`; shareText = `Fuel Cost Calculation:\nDistance: ${entry.distance} km\nMileage: ${entry.average} km/L\nFuel Needed: ${entry.fuelNeeded}\nCost/km: ₹${entry.costPerKm}/km\nTotal Cost: ₹${entry.totalCost}`; }
                 let details = '';
                 if (entry.type === 'gst_add' || entry.type === 'gst_remove') details = `Base: ₹${entry.amount.toFixed(2)} → Total: ₹${entry.total.toFixed(2)} (GST: ₹${entry.gstAmount.toFixed(2)})`;
-                else if (entry.type === 'pergram') { iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 12H4M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/></svg>`; title = `Per Gram · ${entry.unit}`; shareText = `Per Gram Calculation:\n${entry.priceLabel}: ₹${entry.price}\n${entry.weightDisplay}\n${entry.perUnitLabel}: ₹${entry.perUnit}` + (entry.per100g ? `\nPer 100g: ₹${entry.per100g}\nPer 1kg: ₹${entry.per1kg}` : '') + (entry.desiredQty && entry.desiredAmount ? `\nFor ${entry.desiredQty}: ₹${entry.desiredAmount}` : ''); }
+                else if (entry.type === 'pergram') details = `Price: ₹${entry.price} for ${entry.weightDisplay} | ${entry.perUnitLabel}: ₹${entry.perUnit}` + (entry.desiredQty && entry.desiredAmount ? ` | For ${entry.desiredQty}: ₹${entry.desiredAmount}` : '');
                 else if (entry.type === 'discount') details = `Original: ₹${entry.original} | Saved: ₹${entry.saved} → Final: ₹${entry.final}`;
                 else if (entry.type === 'fuel') details = `${entry.distance} km @ ${entry.average} km/L avg → Total: ₹${entry.totalCost}`;
                 const shareBtnHtml = navigator.share
