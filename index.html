@@ -3284,6 +3284,12 @@
             } else if (key === '%') {
                 e.preventDefault();
                 percentMini();
+            } else if (key === 'Escape') {
+                if (curr !== '0' || prev !== '' || op !== null) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    allClearMini();
+                }
             }
         });
 
