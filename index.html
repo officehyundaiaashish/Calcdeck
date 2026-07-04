@@ -2031,9 +2031,17 @@
             /* Top bar — tighter */
 
             .top-bar {
-                padding: 2px 2px 10px;
+                padding: 6px 2px 10px;
                 margin-bottom: 4px;
                 gap: 6px;
+                position: sticky !important;
+                top: 0;
+                background: #12192d !important;
+                z-index: 900;
+            }
+
+            body.light-mode .top-bar {
+                background: #ffffff !important;
             }
 
             .top-bar .brand-mini {
