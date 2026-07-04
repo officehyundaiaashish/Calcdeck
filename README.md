@@ -1,4 +1,4 @@
-# frieghtgstcalc# CalcDeck · Suite
+# CalcDeck · Suite
 
 A clean, premium, and highly optimized web-based suite of utility calculators designed for fast calculations. Formatted with a mobile-first layout, immediate theme-color matching, and complete credential/payment-manager autofill prevention.
 
