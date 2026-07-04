@@ -628,6 +628,15 @@
             grid-column: span 2;
         }
 
+        .calc-btn.ac-btn {
+            background: #C20845;
+            color: white;
+        }
+
+        .calc-btn.ac-btn:hover {
+            background: #a10639;
+        }
+
         .history-item {
             background: rgba(255, 255, 255, 0.08);
             border-radius: 1rem;
@@ -886,6 +895,15 @@
             color: white;
         }
 
+        body.light-mode .calc-btn.ac-btn {
+            background: #C20845;
+            color: white;
+        }
+
+        body.light-mode .calc-btn.ac-btn:hover {
+            background: #a10639;
+        }
+
         body.light-mode .history-item {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -1041,9 +1059,9 @@
         }
 
         .comparison-clear-btn {
-            background: rgba(194, 8, 69, 0.15);
+            background: #C20845;
             border: none;
-            color: #C20845;
+            color: white;
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 0.7rem;
@@ -1052,7 +1070,7 @@
         }
 
         .comparison-clear-btn:hover {
-            background: rgba(194, 8, 69, 0.25);
+            background: #a10639;
         }
 
         .comparison-list {
@@ -3035,7 +3053,7 @@
         function allClearMini() { curr = '0'; prev = ''; op = null; updateMini(); }
         function delMini() { if (curr === 'Error') { curr = '0'; updateMini(); return; } if (curr.length === 1 || curr === '0') curr = '0'; else curr = curr.slice(0, -1); updateMini(); }
         function percentMini() { if (curr === 'Error') return; let v = parseFloat(curr); if (!isNaN(v)) curr = (v / 100).toString(); updateMini(); }
-        function buildMiniGrid() { const grid = document.getElementById('miniCalcGrid'); const btns = [['AC', 'C'], ['%', '%'], ['DEL', 'D'], ['÷', '/'], ['7', '7'], ['8', '8'], ['9', '9'], ['*', '*'], ['4', '4'], ['5', '5'], ['6', '6'], ['-', '-'], ['1', '1'], ['2', '2'], ['3', '3'], ['+', '+'], ['0', '0'], ['.', '.'], ['=', '=']]; grid.innerHTML = ''; btns.forEach(([label, val]) => { const b = document.createElement('button'); b.innerText = label; b.classList.add('calc-btn'); if (['+', '-', '*', '÷'].includes(val)) b.classList.add('operator'); if (val === '=') b.classList.add('equals'); b.onclick = () => { if (val === 'C') allClearMini(); else if (val === 'D') delMini(); else if (val === '%') percentMini(); else if (val === '=') computeMini(); else if (['+', '-', '*', '÷'].includes(val)) opHandler(val); else numHandler(val); }; grid.appendChild(b); }); }
+        function buildMiniGrid() { const grid = document.getElementById('miniCalcGrid'); const btns = [['AC', 'C'], ['%', '%'], ['DEL', 'D'], ['÷', '/'], ['7', '7'], ['8', '8'], ['9', '9'], ['*', '*'], ['4', '4'], ['5', '5'], ['6', '6'], ['-', '-'], ['1', '1'], ['2', '2'], ['3', '3'], ['+', '+'], ['0', '0'], ['.', '.'], ['=', '=']]; grid.innerHTML = ''; btns.forEach(([label, val]) => { const b = document.createElement('button'); b.innerText = label; b.classList.add('calc-btn'); if (['+', '-', '*', '÷'].includes(val)) b.classList.add('operator'); if (val === '=') b.classList.add('equals'); if (val === 'C') b.classList.add('ac-btn'); b.onclick = () => { if (val === 'C') allClearMini(); else if (val === 'D') delMini(); else if (val === '%') percentMini(); else if (val === '=') computeMini(); else if (['+', '-', '*', '÷'].includes(val)) opHandler(val); else numHandler(val); }; grid.appendChild(b); }); }
         buildMiniGrid(); updateMini();
         openCalc.addEventListener('click', (e) => { e.stopPropagation(); miniDialog.classList.toggle('show'); closeAllDropdowns(); document.getElementById('historyDialog')?.classList.remove('show'); comparisonDialog?.classList.remove('show'); hideAllTooltips(); });
         document.addEventListener('click', (e) => { if (!miniDialog.contains(e.target) && e.target !== openCalc) miniDialog.classList.remove('show'); });
