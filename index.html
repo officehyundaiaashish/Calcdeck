@@ -3041,6 +3041,7 @@
                             </svg> Add to Comparison</button>
                     </div>
                     <div class="result">
+                        <div class="result-item"><span>Fuel Type</span><span id="fuelTypeDisplay">Petrol</span></div>
                         <div class="result-item"><span>Fuel Price</span><span id="fuelPriceDisplay">₹0.00</span></div>
                         <div class="result-item"><span>Vehicle Average</span><span id="vehicleAvgDisplay">0.0 km/L</span></div>
                         <div class="result-item"><span>Total Distance</span><span id="totalDistanceDisplay">0 km</span></div>
@@ -4235,6 +4236,8 @@
             
             const unit = selectedFuelType === 'cng' ? 'kg' : 'L';
             
+            const fuelTypeLabels = { petrol: 'Petrol', diesel: 'Diesel', cng: 'CNG' };
+            document.getElementById('fuelTypeDisplay').innerText = fuelTypeLabels[selectedFuelType];
             document.getElementById('fuelPriceDisplay').innerText = '₹' + price.toFixed(2);
             document.getElementById('vehicleAvgDisplay').innerText = avg.toFixed(1) + ' km/' + unit;
             document.getElementById('totalDistanceDisplay').innerText = dist.toFixed(1) + ' km';
@@ -4258,6 +4261,8 @@
             document.getElementById('val_f_a').value = '';
             document.getElementById('val_f_d').value = '';
             const unit = selectedFuelType === 'cng' ? 'kg' : 'L';
+            const fuelTypeLabels = { petrol: 'Petrol', diesel: 'Diesel', cng: 'CNG' };
+            document.getElementById('fuelTypeDisplay').innerText = fuelTypeLabels[selectedFuelType];
             document.getElementById('fuelPriceDisplay').innerText = '₹0.00';
             document.getElementById('vehicleAvgDisplay').innerText = '0.0 km/' + unit;
             document.getElementById('totalDistanceDisplay').innerText = '0 km';
