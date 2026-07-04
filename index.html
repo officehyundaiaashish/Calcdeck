@@ -3259,6 +3259,33 @@
         buildMiniGrid(); updateMini();
         openCalc.addEventListener('click', (e) => { e.stopPropagation(); miniDialog.classList.toggle('show'); closeAllDropdowns(); document.getElementById('historyDialog')?.classList.remove('show'); comparisonDialog?.classList.remove('show'); hideAllTooltips(); });
         document.addEventListener('click', (e) => { if (!miniDialog.contains(e.target) && e.target !== openCalc) miniDialog.classList.remove('show'); });
+        document.addEventListener('keydown', (e) => {
+            if (!miniDialog.classList.contains('show')) return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+            const key = e.key;
+            if (/[0-9.]/.test(key)) {
+                e.preventDefault();
+                numHandler(key);
+            } else if (['+', '-', '*'].includes(key)) {
+                e.preventDefault();
+                opHandler(key);
+            } else if (key === '/') {
+                e.preventDefault();
+                opHandler('÷');
+            } else if (key === 'Enter' || key === '=') {
+                e.preventDefault();
+                computeMini();
+            } else if (key === 'Backspace') {
+                e.preventDefault();
+                delMini();
+            } else if (key.toLowerCase() === 'c') {
+                e.preventDefault();
+                allClearMini();
+            } else if (key === '%') {
+                e.preventDefault();
+                percentMini();
+            }
+        });
 
         // ---------- GST LOGIC WITH HISTORY ----------
         let gstSplitMode = 'intra'; // 'intra' = CGST+SGST, 'inter' = IGST
